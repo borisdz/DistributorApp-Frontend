@@ -1,0 +1,152 @@
+<div class="register-container">
+  <h2>Customer Registration</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label>Name</label>
+      <input formControlName="name" type="text" />
+      <div
+        *ngIf="
+          registerForm.get('name')?.invalid && registerForm.get('name')?.touched
+        "
+      >
+        Name is required.
+      </div>
+    </div>
+
+    <div>
+      <label>Surname</label>
+      <input formControlName="surname" type="text" />
+      <div
+        *ngIf="
+          registerForm.get('surname')?.invalid &&
+          registerForm.get('surname')?.touched
+        "
+      >
+        Surname is required.
+      </div>
+    </div>
+
+    <div>
+      <label>Email</label>
+      <input formControlName="email" type="email" />
+      <div
+        *ngIf="
+          registerForm.get('email')?.invalid &&
+          registerForm.get('email')?.touched
+        "
+      >
+        Email is required.
+      </div>
+    </div>
+
+    <div>
+      <label>Mobile</label>
+      <input formControlName="mobile" type="text" />
+      <div
+        *ngIf="
+          registerForm.get('mobile')?.invalid &&
+          registerForm.get('mobile')?.touched
+        "
+      >
+        Mobile is required.
+      </div>
+    </div>
+
+    <div>
+      <label>Password</label>
+      <input formControlName="password" type="password" />
+      <div
+        *ngIf="
+          registerForm.get('password')?.invalid &&
+          registerForm.get('password')?.touched
+        "
+      >
+        Password is required.
+      </div>
+    </div>
+
+    <div>
+      <label>Repeat Password</label>
+      <input formControlName="repeatedPassword" type="password" />
+      <div
+        *ngIf="
+          registerForm.hasError('notMatching') &&
+          registerForm.get('repeatedPassword')?.touched
+        "
+      >
+        Passwords do not match.
+      </div>
+    </div>
+
+    <div>
+      <label>Profile Image</label>
+      <input
+        type="file"
+        (change)="onProfileImageSelected($event)"
+        accept="image/*"
+      />
+    </div>
+
+    <div>
+      <label>Representative Image</label>
+      <input
+        type="file"
+        (change)="onRepImageSeleted($event)"
+        accept="image/*"
+      />
+    </div>
+
+    <div>
+      <label>City</label>
+      <input formControlName="city" type="number" />
+      <div
+        *ngIf="
+          registerForm.get('city')?.invalid && registerForm.get('city')?.touched
+        "
+      >
+        City is required.
+      </div>
+    </div>
+
+    <div>
+      <label>EDB</label>
+      <input formControlName="edb" type="text" />
+      <div
+        *ngIf="
+          registerForm.get('edb')?.invalid && registerForm.get('edb')?.touched
+        "
+      >
+        EDB is required.
+      </div>
+    </div>
+
+    <div>
+      <label>Company Name</label>
+      <input formControlName="compName" type="text" />
+      <div
+        *ngIf="
+          registerForm.get('compName')?.invalid &&
+          registerForm.get('compName')?.touched
+        "
+      >
+        Company Name is required.
+      </div>
+    </div>
+
+    <div>
+      <label>Address</label>
+      <input formControlName="address" type="text" />
+      <div
+        *ngIf="
+          registerForm.get('address')?.invalid &&
+          registerForm.get('address')?.touched
+        "
+      >
+        Address is required.
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="registerForm.invalid">Register</button>
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  </form>
+</div>
