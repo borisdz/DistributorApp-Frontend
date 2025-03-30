@@ -10,7 +10,7 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:8080/api';
+  private apiUrl = 'https://localhost:8443/api';
 
   constructor(private http: HttpClient) {}
 
@@ -18,7 +18,7 @@ export class AuthService {
     email: string;
     password: string;
   }): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials);
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials, {withCredentials: true});
   }
 
   register(userDetails: {

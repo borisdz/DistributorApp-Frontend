@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 import {
   FormBuilder,
   FormGroup,
@@ -7,7 +7,6 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { response } from 'express';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -33,7 +32,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onLogin() {
     if (this.loginForm.valid) {
       {
         const credentials = this.loginForm.value;
@@ -48,5 +47,13 @@ export class LoginComponent implements OnInit {
         });
       }
     }
+  }
+
+  navigateToRegister() {
+    this.router.navigate(['/register']);
+  }
+
+  navigateToForgotPassword() {
+    this.router.navigate(['/forgot-password'])
   }
 }
