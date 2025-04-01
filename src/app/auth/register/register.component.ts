@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-register',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
+  styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
@@ -25,7 +26,7 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.registerForm = this.fb.group(
+    this.registerForm = this.fb.nonNullable.group(
       {
         name: ['', Validators.required],
         surname: ['', Validators.required],
@@ -34,7 +35,7 @@ export class RegisterComponent implements OnInit {
         password: ['', Validators.required],
         repeatedPassword: ['', Validators.required],
         profileImage: [''],
-        city: [null, Validators],
+        city: [null, Validators.required],
         edb: ['', Validators.required],
         compName: ['', Validators.required],
         address: ['', Validators.required],
