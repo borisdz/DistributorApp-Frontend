@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">My App</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li *ngIf="userRole === 'CUSTOMER'" class="nav-item">
+          <a class="nav-link" routerLink="/customer/dashboard"
+            >Customer Dashboard</a
+          >
+        </li>
+        <li *ngIf="userRole === 'MANAGER'" class="nav-item">
+          <a class="nav-link" routerLink="/manager/dashboard"
+            >Manager Dashboard</a
+          >
+        </li>
+        <li *ngIf="userRole === 'DRIVER'" class="nav-item">
+          <a class="nav-link" routerLink="/driver/dashboard"
+            >Driver Dashboard</a
+          >
+        </li>
+        <li *ngIf="userRole === 'ADMIN'" class="nav-item">
+          <a class="nav-link" routerLink="/admin/dashboard">Admin Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 interface LoginResponse {
   token: string;
@@ -10,7 +11,8 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:8443/api';
+  private apiUrl = 'https://localhost:8443/api/auth';
+  private jwtHelper = new JwtHelperService();
 
   constructor(private http: HttpClient) {}
 
@@ -18,7 +20,9 @@ export class AuthService {
     email: string;
     password: string;
   }): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials, {withCredentials: true});
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials, {
+      withCredentials: true,
+    });
   }
 
   register(userDetails: {
@@ -27,5 +31,18 @@ export class AuthService {
     password: string;
   }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, userDetails);
+  }
+
+  resetPassword(email: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/reset-password`, email);
+  }
+
+  getRole(): string | null {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.role;
+    }
+    return null;
   }
 }

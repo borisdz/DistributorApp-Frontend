@@ -4,6 +4,9 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
 } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
@@ -13,7 +16,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-register',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrl: './register.component.css',
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
@@ -45,11 +48,21 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  passwordMatchValidator(group: FormGroup) {
-    const pass = group.get('password')?.value;
-    const confirmPass = group.get('repeatedPassword')?.value;
-    return pass === confirmPass ? null : { notMatching: true };
-  }
+  passwordMatchValidator: ValidatorFn = (
+    control: AbstractControl
+  ): ValidationErrors | null => {
+    const group = control as FormGroup;
+    const password = group.get('password')?.value;
+    const repeatedPassword = group.get('repeatedPassword')?.value;
+    if (
+      password &&
+      repeatedPassword &&
+      password.value !== repeatedPassword.value
+    ) {
+      return { notMatching: true };
+    }
+    return null;
+  };
 
   onProfileImageSelected(event: Event) {
     const fileInput = event.target as HTMLInputElement;
