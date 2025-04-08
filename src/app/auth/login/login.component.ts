@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       {
         const credentials = this.loginForm.value;
-        this.authService.login(credentials).subscribe({
+        this.authService.login(credentials.email,credentials.password).subscribe({
           next: (response) => {
             localStorage.setItem('jwtToken', response.token);
             console.log('The received token is: ' + response.token);
@@ -51,14 +51,26 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginSuccess() {
-    const token: string = this.authService.getToken();
-    if (token != null) {
-      roles = this.authService.parseJwt(token).data['roles'];
+    const token = this.authService.getToken();
+    if (!token) {
+      console.error('No token found');
+      this.router.navigate(['/login']);
+      return;
     }
 
-    console.log("The user's role is: " + );
+    const decodedToken = this.authService.parseJwt(token);
+    const roles: string[] = decodedToken?.roles || [];
 
-    switch (role) {
+    if(roles.length===0){
+      this.router.navigate(['/']);
+      return;
+    }
+
+    console.log("The user's role is: " + roles);
+
+    const primaryRole = roles[0].toUpperCase();
+
+    switch (primaryRole) {
       case 'ROLE_CUSTOMER':
         this.router.navigate(['/customer/dashboard']);
         break;

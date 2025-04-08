@@ -49,22 +49,15 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  passwordMatchValidator: ValidatorFn = (
-    control: AbstractControl
-  ): ValidationErrors | null => {
+  passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const group = control as FormGroup;
-    const password = group.get('password')?.value;
-    const repeatedPassword = group.get('repeatedPassword')?.value;
-    if (
-      password &&
-      repeatedPassword &&
-      password.value !== repeatedPassword.value
-    ) {
-      return { notMatching: true };
-    }
-    return null;
+    const pw = group.get('password')?.value;
+    const rpt = group.get('repeatedPassword')?.value;
+    return pw && rpt && pw !== rpt
+      ? { notMatching: true }
+      : null;
   };
-
+  
   onProfileImageSelected(event: Event) {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length) {
@@ -94,21 +87,27 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
+    const formValue = this.registerForm.value;
+    const password = formValue.password;
+    const repeatedPassword = formValue.repeatedPassword;
+    
     if (
       this.registerForm.invalid ||
-      this.registerForm.value.password !==
-        this.registerForm.value.confirmPassword
-    )
+      !password ||
+      !repeatedPassword ||
+      password !== repeatedPassword
+    ) {
       return;
+    }
 
     const formData = new FormData();
-    Object.entries(this.registerForm.value).forEach(([key, value]) => {
-      if (value instanceof File) {
-        formData.append(key, value);
-      } else if (value !== null) {
-        formData.append(key, value.toString());
-      }
-    });
+  Object.entries(formValue).forEach(([key, value]) => {
+    if (value instanceof File) {
+      formData.append(key, value);
+    } else if (value !== null && value !== undefined) {
+      formData.append(key, value.toString());
+    }
+  });
 
     this.authService.register(formData).subscribe({
       next: () => alert('Registration successful!'),

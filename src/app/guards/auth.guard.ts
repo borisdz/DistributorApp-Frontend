@@ -14,8 +14,10 @@ export const authGuard: CanActivateFn = (
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  const requiredRoles = route.data['roles'] as string[];
-
+  let requiredRoles = route.data['roles'];
+  if (!Array.isArray(requiredRoles)) {
+    requiredRoles = requiredRoles ? [requiredRoles] : [];
+  }
   const token = authService.getToken();
   if (!token) {
     router.navigate(['login']);
@@ -23,7 +25,11 @@ export const authGuard: CanActivateFn = (
   }
 
   const user = authService.parseJwt(token);
-  if (!user || !requiredRoles.includes(user.role)) {
+  const userRoles: string[] = (user?.roles as string[]) || [];
+
+  const allowed = requiredRoles.some((r:string) => userRoles.includes(r));
+
+  if (!allowed) {
     router.navigate(['/login']);
     return false;
   }
