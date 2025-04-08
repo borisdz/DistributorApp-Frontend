@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, catchError, Observable, tap } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { environment } from '../../environment';
 
 interface LoginResponse {
   token: string;
@@ -11,38 +12,54 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:8443/api/auth';
+  private http = inject(HttpClient);
   private jwtHelper = new JwtHelperService();
+  private currentUserSubject = new BehaviorSubject<any>(null);
 
-  constructor(private http: HttpClient) {}
-
-  login(credentials: {
-    email: string;
-    password: string;
-  }): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials, {
-      withCredentials: true,
-    });
+  login(email: string, password: string) {
+    return this.http
+      .post<{ token: string }>(`${environment.apiUrl}/auth/login`, {
+        email,
+        password,
+      })
+      .pipe(
+        tap((response) => this.storeToken(response.token)),
+        catchError((error) => {
+          this.clearToken();
+          throw error;
+        })
+      );
   }
 
-  register(userDetails: {
-    name: string;
-    email: string;
-    password: string;
-  }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/register`, userDetails);
+  register(userData: FormData) {
+    return this.http.post<any>(`${environment.apiUrl}/auth/register`, userData);
   }
 
-  resetPassword(email: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/reset-password`, email);
+  resetPassword(email: string) {
+    return this.http.post<any>(
+      `${environment.apiUrl}/auth/reset-password`,
+      email
+    );
   }
 
-  getRole(): string | null {
-    const token = localStorage.getItem('jwtToken');
-    if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.role;
+  private storeToken(token: string) {
+    return localStorage.setItem(environment.tokenKey, token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(environment.tokenKey);
+  }
+
+  clearToken() {
+    localStorage.removeItem(environment.tokenKey);
+    this.currentUserSubject.next(null);
+  }
+
+  parseJwt(token: string) {
+    try {
+      return this.jwtHelper.decodeToken(token);
+    } catch (e) {
+      return null;
     }
-    return null;
   }
 }

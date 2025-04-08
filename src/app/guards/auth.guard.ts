@@ -14,13 +14,19 @@ export const authGuard: CanActivateFn = (
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  const userRole = authService.getRole();
-  const requiredRole = route.data['role'];
+  const requiredRoles = route.data['roles'] as string[];
 
-  if (userRole === requiredRole) {
-    return true;
-  } else {
+  const token = authService.getToken();
+  if (!token) {
+    router.navigate(['login']);
+    return false;
+  }
+
+  const user = authService.parseJwt(token);
+  if (!user || !requiredRoles.includes(user.role)) {
     router.navigate(['/login']);
     return false;
   }
+
+  return true;
 };

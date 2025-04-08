@@ -21,6 +21,7 @@ import { CommonModule } from '@angular/common';
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   errorMessage: string = '';
+  cities: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -35,14 +36,14 @@ export class RegisterComponent implements OnInit {
         surname: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         mobile: ['', Validators.required],
-        password: ['', Validators.required],
+        password: ['', Validators.required, Validators.minLength(8)],
         repeatedPassword: ['', Validators.required],
-        profileImage: [''],
+        profileImage: [null as File | null],
         city: [null, Validators.required],
-        edb: ['', Validators.required],
+        edb: ['', Validators.required, Validators.pattern(/^[0-9]{13}$/)],
         compName: ['', Validators.required],
         address: ['', Validators.required],
-        repImage: ['', Validators.required],
+        repImage: [null as File | null],
       },
       { validators: this.passwordMatchValidator }
     );
@@ -93,16 +94,25 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.registerForm.valid) {
-      const customerData = this.registerForm.value;
-      this.authService.register(customerData).subscribe({
-        next: (response) => {
-          this.router.navigate(['/login']);
-        },
-        error: (err) => {
-          this.errorMessage = err.error.message || 'Registration failed';
-        },
-      });
-    }
+    if (
+      this.registerForm.invalid ||
+      this.registerForm.value.password !==
+        this.registerForm.value.confirmPassword
+    )
+      return;
+
+    const formData = new FormData();
+    Object.entries(this.registerForm.value).forEach(([key, value]) => {
+      if (value instanceof File) {
+        formData.append(key, value);
+      } else if (value !== null) {
+        formData.append(key, value.toString());
+      }
+    });
+
+    this.authService.register(formData).subscribe({
+      next: () => alert('Registration successful!'),
+      error: (err) => alert('Registration failed: ' + err.message),
+    });
   }
 }
