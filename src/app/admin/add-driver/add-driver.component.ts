@@ -56,7 +56,7 @@ export class AddDriverComponent {
     });
 
     this.admin.addDriver(formData).subscribe({
-      next: () => this.router.navigate(['/admin/dashbaord']),
+      next: () => this.router.navigate(['/admin/dashboard']),
       error: (e) => alert('Error adding driver: ' + e.message),
     });
   }
@@ -67,6 +67,11 @@ export class AddDriverComponent {
       .subscribe((data) => {
         this.cities = data;
       });
+  }
+
+  onCityDropdownChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.onCityChange(+value);
   }
 
   onCityChange(cityId: number) {

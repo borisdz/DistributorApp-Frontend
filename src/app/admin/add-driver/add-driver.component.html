@@ -55,7 +55,7 @@
       <select
         class="form-select"
         formControlName="city"
-        (change)="onCityChange($event.target.value)"
+        (change)="onCityDropdownChange($event)"
       >
         <option value="">Select a city</option>
         <option *ngFor="let city of cities" [value]="city.id">
