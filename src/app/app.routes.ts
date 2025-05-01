@@ -16,13 +16,13 @@ export const routes: Routes = [
     data: { roles: ['ROLE_CUSTOMER'] },
   },
   {
-    path: 'customer/dashboard',
+    path: 'manager/dashboard',
     component: ManagerDashboardComponent,
     canActivate: [authGuard],
     data: { roles: ['ROLE_MANAGER'] },
   },
   {
-    path: 'customer/dashboard',
+    path: 'driver/dashboard',
     component: DriverDashboardComponent,
     canActivate: [authGuard],
     data: { roles: ['ROLE_DRIVER'] },
