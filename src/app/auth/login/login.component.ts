@@ -36,16 +36,18 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       {
         const credentials = this.loginForm.value;
-        this.authService.login(credentials.email,credentials.password).subscribe({
-          next: (response) => {
-            localStorage.setItem('jwtToken', response.token);
-            console.log('The received token is: ' + response.token);
-            this.onLoginSuccess();
-          },
-          error: (err) => {
-            this.errorMessage = err.error.errorMessage || 'Login failed';
-          },
-        });
+        this.authService
+          .login(credentials.email, credentials.password)
+          .subscribe({
+            next: (response) => {
+              localStorage.setItem('jwtToken', response.token);
+              console.log('The received token is: ' + response.token);
+              this.onLoginSuccess();
+            },
+            error: (err) => {
+              this.errorMessage = err.error.errorMessage || 'Login failed';
+            },
+          });
       }
     }
   }
@@ -61,7 +63,7 @@ export class LoginComponent implements OnInit {
     const decodedToken = this.authService.parseJwt(token);
     const roles: string[] = decodedToken?.roles || [];
 
-    if(roles.length===0){
+    if (roles.length === 0) {
       this.router.navigate(['/']);
       return;
     }
@@ -69,6 +71,8 @@ export class LoginComponent implements OnInit {
     console.log("The user's role is: " + roles);
 
     const primaryRole = roles[0].toUpperCase();
+
+    localStorage.setItem('role', primaryRole);
 
     switch (primaryRole) {
       case 'ROLE_CUSTOMER':

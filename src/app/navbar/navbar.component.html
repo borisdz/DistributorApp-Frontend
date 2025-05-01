@@ -1,28 +1,102 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">My App</a>
-    <div class="collapse navbar-collapse">
+    <a class="navbar-brand" routerLink="/">DistributorApp</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#nav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
       <ul class="navbar-nav ms-auto">
-        <li *ngIf="userRole === 'CUSTOMER'" class="nav-item">
-          <a class="nav-link" routerLink="/customer/dashboard"
-            >Customer Dashboard</a
-          >
-        </li>
-        <li *ngIf="userRole === 'MANAGER'" class="nav-item">
-          <a class="nav-link" routerLink="/manager/dashboard"
-            >Manager Dashboard</a
-          >
-        </li>
-        <li *ngIf="userRole === 'DRIVER'" class="nav-item">
-          <a class="nav-link" routerLink="/driver/dashboard"
-            >Driver Dashboard</a
-          >
-        </li>
-        <li *ngIf="userRole === 'ADMIN'" class="nav-item">
-          <a class="nav-link" routerLink="/admin/dashboard">Admin Dashboard</a>
-        </li>
+        <!-- Customer -->
+        <ng-container *ngIf="userRole === 'ROLE_CUSTOMER'">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/orders">My Orders</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/proformas"
+              >My Pro-Formas</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/create-order"
+              >Create Order</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/profile">Profile</a>
+          </li>
+        </ng-container>
+        <!-- Manager -->
+        <ng-container *ngIf="userRole === 'ROLE_MANAGER'">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/manager/home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/manager/warehouse">My Warehouse</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/manager/create-delivery"
+              >Create Delivery</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/manager/profile">Profile</a>
+          </li>
+        </ng-container>
+        <!-- Driver -->
+        <ng-container *ngIf="userRole === 'ROLE_DRIVER'">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/driver/home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/driver/profile">Profile</a>
+          </li>
+        </ng-container>
+        <!-- Admin -->
+        <ng-container *ngIf="userRole === 'ROLE_ADMIN'">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+              >Create</a
+            >
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" routerLink="/admin/create/driver"
+                  >Driver</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" routerLink="/admin/create/manager"
+                  >Manager</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" routerLink="/admin/create/warehouse"
+                  >Warehouse</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" routerLink="/admin/create/vehicle"
+                  >Vehicle</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/reports">Reports</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/profile">Profile</a>
+          </li>
+        </ng-container>
         <li class="nav-item">
-          <a class="nav-link" (click)="logout()">Logout</a>
+          <a class="nav-link text-danger" (click)="logout()">Logout</a>
         </li>
       </ul>
     </div>
