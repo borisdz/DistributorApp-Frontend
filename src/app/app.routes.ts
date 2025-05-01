@@ -7,6 +7,10 @@ import { CustomerDashboardComponent } from './customer/customer-dashboard/custom
 import { ManagerDashboardComponent } from './manager/manager-dashboard/manager-dashboard.component';
 import { DriverDashboardComponent } from './driver/driver-dashboard/driver-dashboard.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+import { AddDriverComponent } from './admin/add-driver/add-driver.component';
+import { AddVehicleComponent } from './admin/add-vehicle/add-vehicle.component';
+import { AddWarehouseComponent } from './admin/add-warehouse/add-warehouse.component';
+import { AddManagerComponent } from './admin/add-manager/add-manager.component';
 
 export const routes: Routes = [
   {
@@ -30,6 +34,30 @@ export const routes: Routes = [
   {
     path: 'admin/dashboard',
     component: AdminDashboardComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+  },
+  {
+    path: 'admin/driver/add',
+    component: AddDriverComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+  },
+  {
+    path: 'admin/manager/add',
+    component: AddManagerComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+  },
+  {
+    path: 'admin/warehouse/add',
+    component: AddWarehouseComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+  },
+  {
+    path: 'admin/add/vehicle/add',
+    component: AddVehicleComponent,
     canActivate: [authGuard],
     data: { roles: ['ROLE_ADMIN'] },
   },

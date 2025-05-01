@@ -1,1 +1,21 @@
-<p>add-vehicle works!</p>
+<app-navbar></app-navbar>
+<div class="container mt-4">
+  <h3>Add Vehicle</h3>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label class="form-label">Plate Number</label>
+      <input class="form-control" formControlName="plateNumber" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Model</label>
+      <input class="form-control" formControlName="model" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Capacity</label>
+      <input type="number" class="form-control" formControlName="capacity" />
+    </div>
+    <button class="btn btn-primary" [disabled]="form.invalid">
+      Add Vehicle
+    </button>
+  </form>
+</div>
