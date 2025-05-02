@@ -56,7 +56,7 @@ export const routes: Routes = [
     data: { roles: ['ROLE_ADMIN'] },
   },
   {
-    path: 'admin/add/vehicle/add',
+    path: 'admin/vehicle/add',
     component: AddVehicleComponent,
     canActivate: [authGuard],
     data: { roles: ['ROLE_ADMIN'] },
