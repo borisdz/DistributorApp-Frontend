@@ -5,7 +5,6 @@ import {
   Validators,
   ReactiveFormsModule,
   FormGroup,
-  ɵInternalFormsSharedModule,
 } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
@@ -62,11 +61,9 @@ export class AddDriverComponent {
   }
 
   loadCities() {
-    this.http
-      .get<any[]>(`${environment.apiUrl}/cities/listAll`)
-      .subscribe((data) => {
-        this.cities = data;
-      });
+    this.http.get<any[]>(`${environment.apiUrl}/city/all`).subscribe((data) => {
+      this.cities = data;
+    });
   }
 
   onCityDropdownChange(event: Event) {
@@ -76,9 +73,7 @@ export class AddDriverComponent {
 
   onCityChange(cityId: number) {
     this.http
-      .get<any[]>(
-        `${environment.apiUrl}/admin/vehicle-by-city?cityId=${cityId}`
-      )
+      .get<any[]>(`${environment.apiUrl}/vehicle/find-by-city?cityId=${cityId}`)
       .subscribe((data) => {
         this.vehicles = data;
       });

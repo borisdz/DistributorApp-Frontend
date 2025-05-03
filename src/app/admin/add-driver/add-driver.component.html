@@ -69,7 +69,7 @@
       <select class="form-select" formControlName="vehicle">
         <option value="">Select a vehicle</option>
         <option *ngFor="let v of vehicles" [value]="v.id">
-          {{ v.model }}
+          {{ v.plateNumber }}
         </option>
       </select>
     </div>

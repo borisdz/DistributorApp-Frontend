@@ -83,7 +83,7 @@ export class AddManagerComponent {
 
     this.http
       .get<{ id: number; address: string }>(
-        `${environment.apiUrl}/admin/warehouse-by-city?cityId=${cityId}`
+        `${environment.apiUrl}/warehouse/find-by-city?cityId=${cityId}`
       )
       .subscribe((warehouse) => {
         this.selectedWarehouse = warehouse;
