@@ -3,16 +3,15 @@
   <h3>Create Warehouse</h3>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="mb-3">
-      <label class="form-label">Company Name</label>
-      <input class="form-control" formControlName="compName" />
-    </div>
-    <div class="mb-3">
       <label class="form-label">Address</label>
       <input class="form-control" formControlName="address" />
     </div>
     <div class="mb-3">
       <label class="form-label">City</label>
-      <input type="number" class="form-control" formControlName="city" />
+      <select class="form-select" formControlName="cityId">
+        <option value="">Select your city</option>
+        <option *ngFor="let c of cities" [value]="c.id">{{ c.name }}</option>
+      </select>
     </div>
     <button class="btn btn-primary" [disabled]="form.invalid">
       Create Warehouse
