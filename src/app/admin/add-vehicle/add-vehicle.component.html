@@ -1,0 +1,62 @@
+<app-navbar></app-navbar>
+<div class="container mt-4">
+  <h3>Add Vehicle</h3>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label class="form-label">Carry Weight</label>
+      <input class="form-control" formControlName="plateNumber" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Current Kilometers</label>
+      <input
+        type="number"
+        class="form-control"
+        formControlName="vehicleKilometers"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Service Interval</label>
+      <input class="form-control" formControlName="vehicleServiceInterval" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Last Service Date</label>
+      <input class="form-control" formControlName="vehicleLastService" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Last Service Kilometers</label>
+      <input class="form-control" formControlName="vehicleLastServiceKm" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Plate Number</label>
+      <input
+        type="number"
+        class="form-control"
+        formControlName="vehiclePlate"
+      />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">VIN</label>
+      <input class="form-control" formControlName="vehicleVIN" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Registration Date</label>
+      <input class="form-control" formControlName="vehicleRegDate" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Capacity</label>
+      <input type="number" class="form-control" formControlName="capacity" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Warehouse</label>
+      <select class="form-select" formControlName="warehouseId">
+        <option value="">Select a warehouse</option>
+        <option *ngFor="let wh of warehouses" [value]="wh.id">
+          {{ wh.address }}
+        </option>
+      </select>
+    </div>
+    <button class="btn btn-primary" [disabled]="form.invalid">
+      Add Vehicle
+    </button>
+  </form>
+</div>

@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, tap } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '../../environment';
+import { StorageService } from '../services/storage.service';
 
 interface LoginResponse {
   token: string;
@@ -15,6 +16,8 @@ export class AuthService {
   private http = inject(HttpClient);
   private jwtHelper = new JwtHelperService();
   private currentUserSubject = new BehaviorSubject<any>(null);
+
+  constructor(private storage: StorageService) {}
 
   login(email: string, password: string) {
     return this.http
@@ -43,16 +46,16 @@ export class AuthService {
   }
 
   private storeToken(token: string) {
-    console.log("Token is:" + token.toString);
-    return localStorage.setItem(environment.tokenKey, token);
+    console.log('Token is:' + token.toString);
+    return this.storage.set(environment.tokenKey, token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(environment.tokenKey);
+    return this.storage.get(environment.tokenKey);
   }
 
   clearToken() {
-    localStorage.removeItem(environment.tokenKey);
+    this.storage.remove(environment.tokenKey);
     this.currentUserSubject.next(null);
   }
 
