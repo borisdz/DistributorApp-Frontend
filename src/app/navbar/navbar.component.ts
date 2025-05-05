@@ -15,7 +15,7 @@ export class NavbarComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.userRole = this.authService.getRole();
+    this.userRole = localStorage.getItem('role');
   }
 
   logout() {
