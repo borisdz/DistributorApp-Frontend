@@ -4,9 +4,24 @@
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ms-auto">
         <li *ngIf="userRole === 'CUSTOMER'" class="nav-item">
-          <a class="nav-link" routerLink="/customer/dashboard"
-            >Customer Dashboard</a
-          >
+          <a class="nav-link" routerLink="/customer/dashboard">
+            Customer Dashboard
+          </a>
+          <a class="nav-link" routerLink="/customer/orders">
+            Customer Orders
+          </a>
+          <a class="nav-link" routerLink="/customer/deliveries">
+            Customer Deliveries
+          </a>
+          <a class="nav-link" routerLink="/customer/proFormas">
+            Customer Pro Formas
+          </a>
+          <a class="nav-link" routerLink="/customer/profile">
+            Customer Profile
+          </a>
+          <a class="nav-link" routerLink="/customer/orders/create">
+            Craete an order
+          </a>
         </li>
         <li *ngIf="userRole === 'MANAGER'" class="nav-item">
           <a class="nav-link" routerLink="/manager/dashboard"

@@ -1,1 +1,110 @@
-<p>create-order works!</p>
+<app-navbar></app-navbar>
+<div class="container mt-4">
+  <h1>Place Your Order</h1>
+
+  <!-- Filters -->
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label>Category</label>
+      <select class="form-select" formControlName="category">
+        <option value="">All</option>
+        <option *ngFor="let c of categories" [value]="c.id">
+          {{ c.name }}
+        </option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label>Manufacturer</label>
+      <select class="form-select" formControlName="manufacturer">
+        <option value="">All</option>
+        <option *ngFor="let m of manufacturers" [value]="m.id">
+          {{ m.name }}
+        </option>
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label>Article Name</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="search"
+        placeholder="Search article"
+      />
+    </div>
+  </div>
+
+  <!-- Article Cards -->
+  <div
+    class="scrollable-cards row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-4"
+  >
+    <div class="col" *ngFor="let a of displayed">
+      <div class="card h-100">
+        <img
+          *ngIf="a.image"
+          [src]="a.image"
+          class="card-img-top"
+          alt="Article Image"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ a.name }}</h5>
+          <p class="card-text">
+            Manufacturer: {{ a.manufacturer }}<br />
+            Price: ${{ a.price.toFixed(2) }}<br />
+            In Stock: {{ a.quantity }}
+          </p>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary btn-sm w-100" (click)="addArticle(a)">
+            Add to Order
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Summary -->
+  <h3>Order Summary</h3>
+  <table class="table table-bordered mb-3">
+    <thead>
+      <tr>
+        <th>Article</th>
+        <th>Unit Price</th>
+        <th>Manufacturer</th>
+        <th>Quantity</th>
+        <th>Line Total</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let it of orderItems; let i = index">
+        <td>{{ it.articleName }}</td>
+        <td>${{ it.unitPrice.toFixed(2) }}</td>
+        <td>{{ it.manufacturerName }}</td>
+        <td>{{ it.quantity }}</td>
+        <td>${{ (it.unitPrice * it.quantity).toFixed(2) }}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" (click)="removeItem(i)">
+            Remove
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="mb-3">
+    <label>Total Sum:</label>
+    <span class="fs-5">${{ totalSum.toFixed(2) }}</span>
+  </div>
+
+  <div class="form-check mb-3">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      id="proForma"
+      (change)="toggleProForma($event)"
+    />
+    <label class="form-check-label" for="proForma">Request Pro Forma</label>
+  </div>
+
+  <button class="btn btn-success" (click)="placeOrder()">Place Order</button>
+</div>
