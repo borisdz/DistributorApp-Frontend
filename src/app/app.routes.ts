@@ -7,11 +7,18 @@ import { CustomerDashboardComponent } from './customer/customer-dashboard/custom
 import { ManagerDashboardComponent } from './manager/manager-dashboard/manager-dashboard.component';
 import { DriverDashboardComponent } from './driver/driver-dashboard/driver-dashboard.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
+
 import { CustomerOrdersComponent } from './customer/customer-orders/customer-orders.component';
 import { CreateOrderComponent } from './customer/create-order/create-order.component';
 import { CustomerDeliveriesComponent } from './customer/customer-deliveries/customer-deliveries.component';
 import { CustomerProformasComponent } from './customer/customer-proformas/customer-proformas.component';
 import { CustomerProfileComponent } from './customer/customer-profile/customer-profile.component';
+
+import { AddDriverComponent } from './admin/add-driver/add-driver.component';
+import { AddVehicleComponent } from './admin/add-vehicle/add-vehicle.component';
+import { AddWarehouseComponent } from './admin/add-warehouse/add-warehouse.component';
+import { AddManagerComponent } from './admin/add-manager/add-manager.component';
+
 
 export const routes: Routes = [
   // CUSTOMER ROUTES
@@ -22,6 +29,7 @@ export const routes: Routes = [
     data: { roles: ['ROLE_CUSTOMER'] },
   },
   {
+
     path: 'customer/orders',
     component: CustomerOrdersComponent,
     canActivate: [authGuard],
@@ -69,6 +77,30 @@ export const routes: Routes = [
   {
     path: 'admin/dashboard',
     component: AdminDashboardComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+  },
+  {
+    path: 'admin/driver/add',
+    component: AddDriverComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+  },
+  {
+    path: 'admin/manager/add',
+    component: AddManagerComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+  },
+  {
+    path: 'admin/warehouse/add',
+    component: AddWarehouseComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+  },
+  {
+    path: 'admin/vehicle/add',
+    component: AddVehicleComponent,
     canActivate: [authGuard],
     data: { roles: ['ROLE_ADMIN'] },
   },
