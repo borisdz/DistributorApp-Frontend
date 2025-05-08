@@ -6,48 +6,47 @@
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#nav"
+      aria-controls="nav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="nav">
       <ul class="navbar-nav ms-auto">
-        <li *ngIf="userRole === 'CUSTOMER'" class="nav-item">
-          <a class="nav-link" routerLink="/customer/dashboard">
-            Customer Dashboard
-          </a>
-          <a class="nav-link" routerLink="/customer/orders">
-            Customer Orders
-          </a>
-          <a class="nav-link" routerLink="/customer/deliveries">
-            Customer Deliveries
-          </a>
-          <a class="nav-link" routerLink="/customer/proFormas">
-            Customer Pro Formas
-          </a>
-          <a class="nav-link" routerLink="/customer/profile">
-            Customer Profile
-          </a>
-          <a class="nav-link" routerLink="/customer/orders/create">
-            Craete an order
-          </a>
-        </li>
-        <li *ngIf="userRole === 'MANAGER'" class="nav-item">
-          <a class="nav-link" routerLink="/manager/dashboard"
-            >Manager Dashboard</a
-          >
-        </li>
-        <li *ngIf="userRole === 'DRIVER'" class="nav-item">
-          <a class="nav-link" routerLink="/driver/dashboard"
-            >Driver Dashboard</a
-          >
-        </li>
-        <li *ngIf="userRole === 'ADMIN'" class="nav-item">
-          <a class="nav-link" routerLink="/admin/dashboard">Admin Dashboard</a>
-        </li>
-        <!-- Manager -->
+        <!-- CUSTOMER -->
+        <ng-container *ngIf="userRole === 'ROLE_CUSTOMER'">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/orders">My Orders</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/deliveries"
+              >My Deliveries</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/proformas"
+              >My Pro-Formas</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/customer/orders/create"
+              >Create Order</a
+            >
+          </li>
+        </ng-container>
+
+        <!-- MANAGER -->
         <ng-container *ngIf="userRole === 'ROLE_MANAGER'">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/manager/home">Home</a>
+            <a class="nav-link" routerLink="/manager/dashboard">Dashboard</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/manager/warehouse">My Warehouse</a>
@@ -61,22 +60,30 @@
             <a class="nav-link" routerLink="/manager/profile">Profile</a>
           </li>
         </ng-container>
-        <!-- Driver -->
+
+        <!-- DRIVER -->
         <ng-container *ngIf="userRole === 'ROLE_DRIVER'">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/driver/home">Home</a>
+            <a class="nav-link" routerLink="/driver/dashboard">Dashboard</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/driver/profile">Profile</a>
           </li>
         </ng-container>
-        <!-- Admin -->
+
+        <!-- ADMIN -->
         <ng-container *ngIf="userRole === 'ROLE_ADMIN'">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
-              >Create</a
+            <a
+              class="nav-link dropdown-toggle"
+              id="createDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
             >
-            <ul class="dropdown-menu">
+              Create
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="createDropdown">
               <li>
                 <a class="dropdown-item" routerLink="/admin/driver/add"
                   >Driver</a
@@ -106,6 +113,8 @@
             <a class="nav-link" routerLink="/admin/profile">Profile</a>
           </li>
         </ng-container>
+
+        <!-- LOGOUT -->
         <li class="nav-item">
           <a class="nav-link text-danger" (click)="logout()">Logout</a>
         </li>

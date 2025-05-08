@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Article, Category, Manufacturer } from '../models';
+import { PageResponse } from '../models/page-response.model';
+import { PagedModel } from '../models/paged-model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +22,27 @@ export class OrderService {
     );
   }
 
-  listArticles(): Observable<Article[]> {
-    return this.http.get<Article[]>(`${environment.apiUrl}/article/all`);
+  listArticles(
+    categoryId: number | null,
+    manufacturerId: number | null,
+    nameFilter: string,
+    page: number,
+    size: number
+  ): Observable<PagedModel<Article>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (categoryId != null)
+      params = params.set('categoryId', categoryId.toString());
+    if (manufacturerId != null)
+      params = params.set('manufacturerId', manufacturerId.toString());
+    if (nameFilter) params = params.set('search', nameFilter);
+
+    return this.http.get<PagedModel<Article>>(
+      `${environment.apiUrl}/article/all-pages`,
+      { params }
+    );
   }
 
   placeOrder(orderItems: any[], proForma: boolean): Observable<any> {

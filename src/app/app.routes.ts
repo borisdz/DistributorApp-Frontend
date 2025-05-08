@@ -19,7 +19,6 @@ import { AddVehicleComponent } from './admin/add-vehicle/add-vehicle.component';
 import { AddWarehouseComponent } from './admin/add-warehouse/add-warehouse.component';
 import { AddManagerComponent } from './admin/add-manager/add-manager.component';
 
-
 export const routes: Routes = [
   // CUSTOMER ROUTES
   {
@@ -29,14 +28,13 @@ export const routes: Routes = [
     data: { roles: ['ROLE_CUSTOMER'] },
   },
   {
-
     path: 'customer/orders',
     component: CustomerOrdersComponent,
     canActivate: [authGuard],
     data: { roles: ['ROLE_CUSTOMER'] },
   },
   {
-    path: 'customer/orders/add',
+    path: 'customer/orders/create',
     component: CreateOrderComponent,
     canActivate: [authGuard],
     data: { roles: ['ROLE_CUSTOMER'] },

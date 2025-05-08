@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { Category, Manufacturer, Article, OrderItem } from '../../models';
 import { OrderService } from '../../services/order.service';
+import { PagedModel } from '../../models/paged-model';
 
 @Component({
   selector: 'app-create-order',
@@ -15,11 +16,13 @@ import { OrderService } from '../../services/order.service';
 })
 export class CreateOrderComponent implements OnInit {
   form!: FormGroup;
+  displayed: Article[] = [];
+  currentPage = 0;
+  totalPages = 0;
+  pageSize = 50;
+  orderItems: OrderItem[] = [];
   categories: Category[] = [];
   manufacturers: Manufacturer[] = [];
-  articles: Article[] = [];
-  displayed: Article[] = [];
-  orderItems: OrderItem[] = [];
   totalSum = 0;
   proForma = false;
 
@@ -32,33 +35,43 @@ export class CreateOrderComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      category: [''],
-      manufacturer: [''],
+      category: [null],
+      manufacturer: [null],
       search: [''],
     });
 
-    this.svc.listCategories().subscribe((c) => (this.categories = c));
-    this.svc.listManufacturers().subscribe((m) => (this.manufacturers = m));
-    this.svc.listArticles().subscribe((a) => {
-      this.articles = a;
-      this.applyFilter();
-    });
+    this.form.valueChanges.subscribe(() => this.loadPage(0));
 
-    this.form.valueChanges.subscribe(() => this.applyFilter());
+    this.loadPage(0);
+
+    this.svc.listCategories().subscribe((cats) => (this.categories = cats));
+    this.svc
+      .listManufacturers()
+      .subscribe((mans) => (this.manufacturers = mans));
   }
 
-  applyFilter() {
+  loadPage(page: number) {
     const { category, manufacturer, search } = this.form.value;
+    this.svc
+      .listArticles(category, manufacturer, search, page, this.pageSize)
+      .subscribe((resp: PagedModel<Article>) => {
+        const listKey = Object.keys(resp._embedded)[0];
+        this.displayed = resp._embedded[listKey];
+        this.currentPage = resp.page.number;
+        this.totalPages = resp.page.totalPages;
+      });
+  }
 
-    const term = (search || '').toLowerCase();
+  prevPage() {
+    if (this.currentPage > 0) this.loadPage(this.currentPage - 1);
+  }
 
-    this.displayed = this.articles.filter((a) => {
-      return (
-        (!category || a.categoryId === +category) &&
-        (!manufacturer || a.manufacturerId === +manufacturer) &&
-        (!term || a.name.toLowerCase().includes(term))
-      );
-    });
+  nextPage() {
+    if (this.currentPage + 1 < this.totalPages)
+      this.loadPage(this.currentPage + 1);
+  }
+  trackByArticle(_: number, a: Article) {
+    return a.id;
   }
 
   addArticle(a: Article) {
