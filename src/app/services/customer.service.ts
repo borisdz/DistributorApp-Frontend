@@ -13,10 +13,10 @@ export class CustomerService {
   constructor(private http: HttpClient) { }
 
   getCurrentOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${environment.apiUrl}/current-orders`);
+    return this.http.get<Order[]>(`${environment.apiUrl}/order/customer-current-orders`);
   }
 
   getCurrentDeliveries(): Observable<Delivery[]>{
-    return this.http.get<Delivery[]>(`${environment.apiUrl}/current-deliveries`);
+    return this.http.get<Delivery[]>(`${environment.apiUrl}/delivery/customer-current-deliveries`);
   }
 }
