@@ -82,10 +82,7 @@ export class CreateOrderComponent implements OnInit {
       return;
     }
     this.orderItems.push({
-      articleId: a.id,
-      articleName: a.name,
-      manufacturerName: a.manufacturer,
-      unitPrice: a.price,
+      article: a,
       quantity: qty,
     });
 
@@ -99,7 +96,7 @@ export class CreateOrderComponent implements OnInit {
 
   updateTotal() {
     this.totalSum = this.orderItems.reduce(
-      (sum, it) => sum + it.unitPrice * it.quantity,
+      (sum, it) => sum + it.article.price * it.quantity,
       0
     );
   }
@@ -114,13 +111,13 @@ export class CreateOrderComponent implements OnInit {
       return;
     }
     this.svc.placeOrder(this.orderItems, this.proForma).subscribe({
-      next: () => {
+      next: (createdOrder) => {
         alert('Order placed!');
         this.orderItems = [];
         this.updateTotal();
         this.router.navigate(['/customer/dashboard']);
       },
-      error: () => alert('Error'),
+      error: (err) => alert('Error: ' + (err.message || 'Unknown'))
     });
   }
 }

@@ -1,7 +1,6 @@
+import { Article } from "./article.model";
+
 export interface OrderItem {
-  articleId: number;
-  articleName: string;
-  manufacturerName: string;
-  unitPrice: number;
+  article: Article;
   quantity: number;
 }

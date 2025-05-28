@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Article, Category, Manufacturer } from '../models';
+import { Article, Category, Manufacturer, OrderItem } from '../models';
 import { PageResponse } from '../models/page-response.model';
 import { PagedModel } from '../models/paged-model';
 
@@ -45,10 +45,26 @@ export class OrderService {
     );
   }
 
-  placeOrder(orderItems: any[], proForma: boolean): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/order/create-order`, {
-      orderItems,
-      proForma,
-    });
+  placeOrder(orderItems: OrderItem[], proForma: boolean): Observable<any> {
+    const createOrderPayload = {
+      orderItems: orderItems.map((it)=>({
+        article: {
+          id: it.article.id,
+          name: it.article.name,
+          manufacturer: it.article.manufacturer,
+          quantity: it.article.quantity,
+          manufacturerId: it.article.manufacturerId,
+          price: it.article.price,
+          category: it.article.category,
+          categoryId: it.article.categoryId,
+          weight: it.article.weight,
+          image: it.article.image || null
+        },
+        quantity: it.quantity
+      })),
+      proForma: proForma
+    };
+
+    return this.http.post(`${environment.apiUrl}/order/create`, createOrderPayload);
   }
 }

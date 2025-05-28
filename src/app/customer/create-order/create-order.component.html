@@ -103,11 +103,11 @@
     </thead>
     <tbody>
       <tr *ngFor="let it of orderItems; let i = index">
-        <td>{{ it.articleName }}</td>
-        <td>${{ it.unitPrice.toFixed(2) }}</td>
-        <td>{{ it.manufacturerName }}</td>
+        <td>{{ it.article.name }}</td>
+        <td>${{ it.article.price.toFixed(2) }}</td>
+        <td>{{ it.article.manufacturer }}</td>
         <td>{{ it.quantity }}</td>
-        <td>${{ (it.unitPrice * it.quantity).toFixed(2) }}</td>
+        <td>${{ (it.article.price * it.quantity).toFixed(2) }}</td>
         <td>
           <button class="btn btn-danger btn-sm" (click)="removeItem(i)">
             Remove
