@@ -1,5 +1,11 @@
 export interface Order {
-    ordDate: string;
-    ordSum: number;
-    statusName: string;
+  id: number;
+  ordDate: string;
+  ordSum: number;
+  ordFulfillmentDate: string;
+  ordComment: string;
+  oStatusId: number;
+  customerId: number;
+  deliveryId: number;
+  pfId: number;
 }

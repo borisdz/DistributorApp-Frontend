@@ -1,46 +1,47 @@
 <app-navbar></app-navbar>
 
 <div class="container mt-4">
-    <h1 class="mb-4">Here is your dashboard</h1>
+  <h1 class="mb-4">Here is your dashboard</h1>
 
-    <div class="row">
-        <div class="col-md-6">
-            <h2>Your Current Orders</h2>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Order Date</th>
-                        <th>Order Sum</th>
-                        <th>Order Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let order of orders; trackBy: trackByOrder">
-                        <td>{{ order.ordDate | date: 'shortDate' }}</td>
-                        <td>{{ order.ordSum | currency }}</td>
-                        <td>{{ order.statusName }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-md-6">
-            <h2>Your Current Deliveries</h2>
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Delivery Date</th>
-                  <th>Driver Name</th>
-                  <th>Delivery Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let del of deliveries; trackBy: trackByDelivery">
-                  <td>{{ del.delDate | date: 'shortDate' }}</td>
-                  <td>{{ del.driverName }}</td>
-                  <td>{{ del.delStatus }}</td>
-                </tr>
-              </tbody>
-            </table>
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Your Current Orders</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Order Date</th>
+            <th>Order Sum</th>
+            <th>Order Comment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders; trackBy: trackByOrder">
+            <td>{{ order.ordDate | date: "shortDate" }}</td>
+            <td>{{ order.ordSum | currency }}</td>
+            <td>{{ order.ordComment }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
+    <div class="col-md-6">
+      <h2>Your Current Deliveries</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Delivery Date</th>
+            <th>Driver Name</th>
+            <th>Delivery Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let del of deliveries; trackBy: trackByDelivery">
+            <td>{{ del.delDate | date: "shortDate" }}</td>
+            <td>{{ del.driverName }}</td>
+            <td>{{ del.delStatus }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
