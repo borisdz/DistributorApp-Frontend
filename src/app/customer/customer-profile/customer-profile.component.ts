@@ -10,6 +10,7 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { Customer } from '../../models';
 import { CustomerService } from '../../services/customer.service';
+import { ImageService } from '../../services/image.service';
 
 @Component({
   selector: 'app-customer-profile',
@@ -25,6 +26,7 @@ export class CustomerProfileComponent {
   constructor(
     private svc: CustomerService,
     private fb: FormBuilder,
+    private imageSvc: ImageService,
   ) {}
 
   ngOnInit() {
@@ -68,16 +70,35 @@ export class CustomerProfileComponent {
   }
 
   changeProfileImage(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.svc.updateProfilePicture(file).subscribe((u) => (this.profile = u));
-    }
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file: File = input.files[0];
+    this.imageSvc.uploadImage(file, 'CUSTOMER', this.profile.id).subscribe({
+      next: (res) => {
+        this.profile.image = res.imgPath;
+      },
+      error: (err) => {
+        console.error('Upload failed', err);
+        alert('Failed to upload profile image.');
+      },
+    });
   }
 
   changeRepImage(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.svc.updateRepImage(file).subscribe((u) => (this.profile = u));
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
     }
+    const file: File = input.files[0];
+    this.imageSvc.uploadImage(file, 'CUSTOMER_REP', this.profile.id).subscribe({
+      next: (res) => {
+        this.profile.repImage = res.imgPath;
+      },
+      error: (err) => {
+        console.error('Upload failed', err);
+        alert('Failed to upload representative image.');
+      },
+    });
   }
 }
