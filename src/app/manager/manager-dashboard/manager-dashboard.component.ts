@@ -13,8 +13,8 @@ import { DeliveryService } from '../../services/delivery.service';
   styleUrl: './manager-dashboard.component.css',
 })
 export class ManagerDashboardComponent {
-  orders: Order[] = [];
-  deliveries: Delivery[] = [];
+  unassignedOrders: Order[] = [];
+  activeDeliveries: Delivery[] = [];
 
   constructor(
     private orderSvc: OrderService,
@@ -22,14 +22,19 @@ export class ManagerDashboardComponent {
   ) {}
 
   ngOnInit() {
-    this.orderSvc.getUnassignedOrdersForWarehouse().subscribe({
-      next: (o) => (this.orders = o),
-      error: () => alert('Failed to load unassigned orders.'),
-    });
+    this.loadOrders();
+    this.loadDeliveries();
+  }
 
-    this.deliverySvc.getActiveDeliveriesForWarehouse().subscribe({
-      next: (d) => (this.deliveries = d),
-      error: () => alert('Failed to load active deliveries.'),
-    });
+  loadOrders() {
+    this.orderSvc
+      .getUnassignedOrdersForWarehouse()
+      .subscribe((orders) => (this.unassignedOrders = orders));
+  }
+
+  loadDeliveries() {
+    this.deliverySvc
+      .getActiveDeliveriesForWarehouse()
+      .subscribe((deliveries) => (this.activeDeliveries = deliveries));
   }
 }

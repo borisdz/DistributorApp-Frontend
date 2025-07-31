@@ -1,1 +1,40 @@
 <app-navbar></app-navbar>
+<h2>New Orders</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Order #</th>
+      <th>Customer</th>
+      <th>Date</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of unassignedOrders">
+      <td>{{ order.id }}</td>
+      <!-- <td>{{ order.customerName }}</td>
+      <td>{{ order.date | date }}</td>
+      <td>{{ order.status }}</td> -->
+    </tr>
+  </tbody>
+</table>
+
+<h2>Active Deliveries</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Delivery #</th>
+      <th>Driver</th>
+      <th>Status</th>
+      <th>Orders</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let delivery of activeDeliveries">
+      <!-- <td>{{ delivery.id }}</td> -->
+      <td>{{ delivery.driverName }}</td>
+      <!-- <td>{{ delivery.status }}</td> -->
+      <!-- <td>{{ delivery.orderCount }}</td> -->
+    </tr>
+  </tbody>
+</table>
