@@ -18,6 +18,7 @@ import { AddDriverComponent } from './admin/add-driver/add-driver.component';
 import { AddVehicleComponent } from './admin/add-vehicle/add-vehicle.component';
 import { AddWarehouseComponent } from './admin/add-warehouse/add-warehouse.component';
 import { AddManagerComponent } from './admin/add-manager/add-manager.component';
+import { ManagerWarehouseComponent } from './manager/manager-warehouse/manager-warehouse.component';
 
 export const routes: Routes = [
   // CUSTOMER ROUTES
@@ -61,6 +62,12 @@ export const routes: Routes = [
   {
     path: 'manager/dashboard',
     component: ManagerDashboardComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_MANAGER'] },
+  },
+  {
+    path: 'manager/warehouse',
+    component: ManagerWarehouseComponent,
     canActivate: [authGuard],
     data: { roles: ['ROLE_MANAGER'] },
   },
