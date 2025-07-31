@@ -1,0 +1,126 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h3>Create a Manager</h3>
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    enctype="multipart/form-data"
+  >
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          formControlName="email"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          formControlName="password"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Repeat Password</label>
+        <input
+          type="password"
+          class="form-control"
+          formControlName="repeatedPassword"
+          required
+        />
+        <div *ngIf="form.hasError('notMatching')" class="text-danger small">
+          Passwords do not match
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">First Name</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="name"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Last Name</label>
+        <input
+          type="text"
+          class="form-control"
+          formControlName="surname"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Mobile</label>
+        <input
+          type="tel"
+          class="form-control"
+          formControlName="mobile"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Profile Picture</label>
+        <input
+          type="file"
+          class="form-control"
+          (change)="onFileSelected($event)"
+          accept="image/*"
+        />
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">City</label>
+        <select
+          class="form-select"
+          formControlName="city"
+          (change)="onCityChange($event)"
+        >
+          <option value="">Select your city</option>
+          <option *ngFor="let c of cities" [value]="c.id">{{ c.name }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-6" *ngIf="selectedWarehouse">
+        <label class="form-label">Warehouse</label>
+        <input
+          type="text"
+          class="form-control"
+          [value]="selectedWarehouse.address"
+          readonly
+        />
+        <!-- hidden input is the formControl above -->
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+      Submit
+    </button>
+  </form>
+</div>

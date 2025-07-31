@@ -1,0 +1,20 @@
+<app-navbar></app-navbar>
+<div class="container mt-4">
+  <h3>Create Warehouse</h3>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label class="form-label">Address</label>
+      <input class="form-control" formControlName="address" />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">City</label>
+      <select class="form-select" formControlName="cityId">
+        <option value="">Select your city</option>
+        <option *ngFor="let c of cities" [value]="c.id">{{ c.name }}</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" [disabled]="form.invalid">
+      Create Warehouse
+    </button>
+  </form>
+</div>
