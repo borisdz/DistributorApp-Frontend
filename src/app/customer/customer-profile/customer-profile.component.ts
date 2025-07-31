@@ -74,31 +74,49 @@ export class CustomerProfileComponent {
     if (!input.files || input.files.length === 0) return;
 
     const file: File = input.files[0];
-    this.imageSvc.uploadImage(file, 'CUSTOMER', this.profile.id).subscribe({
-      next: (res) => {
-        this.profile.image = res.imgPath;
-      },
-      error: (err) => {
+    this.imageSvc
+      .uploadImage(file, 'CUSTOMER', this.profile.id)
+      .then((obs) => {
+        obs.subscribe({
+          next: (res) => {
+            this.profile.image = res.imgPath;
+          },
+          error: (err) => {
+            console.error('Upload failed', err);
+            alert('Failed to upload profile image.');
+          },
+        });
+      })
+      .catch((err) => {
         console.error('Upload failed', err);
         alert('Failed to upload profile image.');
-      },
-    });
+      });
   }
 
-  changeRepImage(event: Event) {
+  async changeRepImage(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) {
       return;
     }
     const file: File = input.files[0];
-    this.imageSvc.uploadImage(file, 'CUSTOMER_REP', this.profile.id).subscribe({
-      next: (res) => {
-        this.profile.repImage = res.imgPath;
-      },
-      error: (err) => {
-        console.error('Upload failed', err);
-        alert('Failed to upload representative image.');
-      },
-    });
+    try {
+      const obs = await this.imageSvc.uploadImage(
+        file,
+        'CUSTOMER_REP',
+        this.profile.id,
+      );
+      obs.subscribe({
+        next: (res) => {
+          this.profile.repImage = res.imgPath;
+        },
+        error: (err) => {
+          console.error('Upload failed', err);
+          alert('Failed to upload representative image.');
+        },
+      });
+    } catch (err) {
+      console.error('Upload failed', err);
+      alert('Failed to upload representative image.');
+    }
   }
 }
