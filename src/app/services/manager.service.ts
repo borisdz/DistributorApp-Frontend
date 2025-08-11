@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment';
 import { Manager } from '../models/manager.model';
+import { ProForma } from '../models/pro-forma.model';
+import { FinancialSummary } from '../models/financial-summary.model';
 
 @Injectable({
   providedIn: 'root',
@@ -28,5 +30,21 @@ export class ManagerService {
       `${environment.apiUrl}/manager/profile-picture`,
       formData,
     );
+  }
+
+  getAllProFormas(): Observable<ProForma[]> {
+    return this.http.get<ProForma[]>(`${environment.apiUrl}/manager/pro-formas`);
+  }
+
+  getMonthlyFinancialSummary(): Observable<FinancialSummary>{
+    return this.http.get<FinancialSummary>(`${environment.apiUrl}/manager/finances/monthly`);
+  }
+
+  getQuarterlyFinancialSummary(): Observable<FinancialSummary>{
+    return this.http.get<FinancialSummary>(`${environment.apiUrl}/manager/finances/quarterly`)
+  }
+
+  createProForma(proForma: Partial<ProForma>): Observable<ProForma>{
+    return this.http.post<ProForma>(`${environment.apiUrl}/manager/pro-formas`, proForma);
   }
 }
