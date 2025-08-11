@@ -8,4 +8,6 @@ export interface Order {
   customerId: number;
   deliveryId: number;
   pfId: number;
+  isAvailable?: boolean;
+  missingArticles?: any[];
 }

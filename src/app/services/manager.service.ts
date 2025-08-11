@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment';
 import { Manager } from '../models/manager.model';
+import { Driver } from '../models/driver.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ManagerService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getProfile(): Observable<Manager> {
     return this.http.get<Manager>(`${environment.apiUrl}/manager/profile`);
@@ -28,5 +29,11 @@ export class ManagerService {
       `${environment.apiUrl}/manager/profile-picture`,
       formData,
     );
+  }
+
+  getAvailableDrivers(deliveryDate: Date | null) {
+    return this.http.get<Driver[]>(`${environment.apiUrl}/manager/drivers/available`, {
+      params: { deliveryDate: deliveryDate ? deliveryDate.toISOString() : '' },
+    });
   }
 }

@@ -1,1 +1,87 @@
-<p>create-delivery works!</p>
+<app-navbar></app-navbar>
+
+<div class="container">
+  <h2>Create New Delivery</h2>
+
+  <div class="orders-section">
+    <h3>Available Orders</h3>
+    <div class="orders-grid">
+      @for (order of undeliveredOrders; track order.id) {
+        <div class="order-card" 
+             [class.unavailable]="!order.isAvailable"
+             [class.selected]="selectedOrders.includes(order)"
+             (click)="toggleOrderSelection(order)">
+          
+          <div class="order-header">
+            <span>Order #{{order.id}}</span>
+            <span>{{order.createdAt | date}}</span>
+          </div>
+
+          <div class="order-details">
+            <p><strong>Customer:</strong> {{order.customerName}}</p>
+            <p><strong>Total:</strong> {{order.ordSum| currency}}</p>
+          </div>
+
+          <div class="order-hover-details">
+            <h4>Delivery Address:</h4>
+            <p>{{order.deliveryAddress}}</p>
+
+            <h4>Articles:</h4>
+            <ul>
+              @for (article of order.articles; track article.id) {
+                <li>
+                  {{article.name}} - {{article.quantity}} units
+                  ({{article.price | currency}}/unit)
+                </li>
+              }
+            </ul>
+
+            @if (!order.isAvailable) {
+              <div class="missing-articles">
+                <h4>Missing Articles:</h4>
+                <ul>
+                  @for (article of order.missingArticles; track article.id) {
+                    <li>
+                      {{article.name}} - Need: {{article.quantity}}, 
+                      Available: {{warehouseStock[article.id]?.quantity || 0}}
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="delivery-form" [class.enabled]="selectedOrders.length > 0">
+    <h3>Delivery Details</h3>
+    <form [formGroup]="form" (ngSubmit)="createDelivery()">
+      <div class="form-group">
+        <label for="deliveryDate">Delivery Date</label>
+        <input type="date" 
+               id="deliveryDate" 
+               formControlName="deliveryDate"
+               [min]="today">
+      </div>
+
+      <div class="form-group">
+        <label for="driver">Select Driver</label>
+        <select id="driver" formControlName="driverId">
+          <option value="">Select a driver...</option>
+          @for (driver of drivers; track driver.id) {
+            <option [value]="driver.id">
+              {{driver.name}}
+            </option>
+          }
+        </select>
+      </div>
+
+      <button type="submit" 
+              [disabled]="form.invalid || !selectedOrders.length">
+        Create Delivery
+      </button>
+    </form>
+  </div>
+</div>
