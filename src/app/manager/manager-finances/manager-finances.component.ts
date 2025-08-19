@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ProForma } from '../../models/pro-forma.model';
 import { FinancialSummary } from '../../models/financial-summary.model';
 import { ManagerService } from '../../services/manager.service';
+import { ProFormaResponseDto } from '../../models/pro-forma-dtos.model';
 
 @Component({
   selector: 'app-manager-finances',
@@ -13,10 +14,10 @@ import { ManagerService } from '../../services/manager.service';
   styleUrl: './manager-finances.component.css'
 })
 export class ManagerFinancesComponent {
-  allProFormas: ProForma[] = [];
-  unpaidProFormas: ProForma[] = [];
-  pendingProFormas: ProForma[] = [];
-  overdueProFormas: ProForma[] = [];
+  allProFormas: ProFormaResponseDto[] = [];
+  unpaidProFormas: ProFormaResponseDto[] = [];
+  pendingProFormas: ProFormaResponseDto[] = [];
+  overdueProFormas: ProFormaResponseDto[] = [];
 
   monthlySummary: FinancialSummary | null = null;
   quarterlySummary: FinancialSummary | null = null;
@@ -27,15 +28,15 @@ export class ManagerFinancesComponent {
   constructor(
     private managerService: ManagerService,
     private fb: FormBuilder
-  ){
+  ) {
     this.initForm();
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.loadData();
   }
 
-  private initForm(){
+  private initForm() {
     this.proFormaForm = this.fb.group({
       orderId: ['', Validators.required],
       dueDate: ['', Validators.required],
@@ -43,9 +44,9 @@ export class ManagerFinancesComponent {
     });
   }
 
-  private loadData(){
+  private loadData() {
     this.managerService.getAllProFormas().subscribe({
-      next: (data: ProForma[])=>{
+      next: (data: ProFormaResponseDto[]) => {
         this.allProFormas = data;
         this.categorizeProFormas();
       },
@@ -55,17 +56,17 @@ export class ManagerFinancesComponent {
     this.loadFinancialSummaries();
   }
 
-  private categorizeProFormas(){
+  private categorizeProFormas() {
     const now = new Date();
 
-    this.unpaidProFormas = this.allProFormas.filter(pf=>!pf.isPaid);
-    this.pendingProFormas = this.allProFormas.filter(pf=>!pf.isCreated);
-    this.overdueProFormas = this.allProFormas.filter(pf=> 
-      !pf.isPaid && new Date(pf.dueDate)<now
+    this.unpaidProFormas = this.allProFormas.filter(pf => pf.statusName == 'UNPAID');
+    this.pendingProFormas = this.allProFormas.filter(pf => pf.statusName == 'PENDING');
+    this.overdueProFormas = this.allProFormas.filter(pf =>
+      pf.statusName == 'UNPAID' && new Date(pf.pfDeadline) < now
     );
   }
 
-  loadFinancialSummaries(){
+  loadFinancialSummaries() {
     if (this.selectedPeriod === 'monthly') {
       this.managerService.getMonthlyFinancialSummary().subscribe({
         next: (data) => this.monthlySummary = data,
@@ -79,7 +80,7 @@ export class ManagerFinancesComponent {
     }
   }
 
-  createProForma(){
+  createProForma() {
     if (this.proFormaForm.valid) {
       this.managerService.createProForma(this.proFormaForm.value).subscribe({
         next: () => {

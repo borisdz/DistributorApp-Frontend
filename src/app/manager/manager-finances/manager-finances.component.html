@@ -37,7 +37,7 @@
 
   <section class="pro-forma-tables">
     <div class="table-container">
-      <h3>Unpaid Pro-Formas</h3>
+      <h3>Unpaid Pro-Formas ({{unpaidProFormas.length}})</h3>
       <table>
         <thead>
           <tr>
@@ -52,10 +52,10 @@
           @for (proForma of unpaidProFormas; track proForma.id) {
             <tr>
               <td>{{proForma.id}}</td>
-              <td>{{proForma.orderId}}</td>
+              <td>{{proForma.ordId}}</td>
               <td>{{proForma.amount | currency}}</td>
-              <td>{{proForma.dueDate | date}}</td>
-              <td>{{proForma.status}}</td>
+              <td>{{proForma.pfDeadline | date}}</td>
+              <td>{{proForma.statusName}}</td>
             </tr>
           }
         </tbody>
@@ -63,7 +63,7 @@
     </div>
 
     <div class="table-container">
-      <h3>Overdue Pro-Formas</h3>
+      <h3>Overdue Pro-Formas ({{overdueProFormas.length}})</h3>
       <table>
         <thead>
           <tr>
@@ -76,12 +76,12 @@
         </thead>
         <tbody>
           @for (proForma of overdueProFormas; track proForma.id) {
-            <tr>
+            <tr class="overdue">
               <td>{{proForma.id}}</td>
-              <td>{{proForma.orderId}}</td>
+              <td>{{proForma.ordId}}</td>
               <td>{{proForma.amount | currency}}</td>
-              <td>{{proForma.dueDate | date}}</td>
-              <td>{{proForma.daysOverdue}}</td>
+              <td>{{proForma.pfDeadline | date}}</td>
+              <td class="days-overdue">{{proForma.daysOverdue}}</td>
             </tr>
           }
         </tbody>
@@ -93,18 +93,18 @@
     <h3>Create New Pro-Forma</h3>
     <form [formGroup]="proFormaForm" (ngSubmit)="createProForma()">
       <div class="form-group">
-        <label for="orderId">Order ID</label>
-        <input id="orderId" type="text" formControlName="orderId">
+        <label for="ordId">Order ID</label>
+        <input id="ordId" type="number" formControlName="ordId">
       </div>
 
       <div class="form-group">
-        <label for="dueDate">Due Date</label>
-        <input id="dueDate" type="date" formControlName="dueDate">
+        <label for="customerId">Customer ID</label>
+        <input id="customerId" type="number" formControlName="customerId">
       </div>
 
       <div class="form-group">
-        <label for="notes">Notes</label>
-        <textarea id="notes" formControlName="notes"></textarea>
+        <label for="pfDeadline">Deadline</label>
+        <input id="pfDeadline" type="date" formControlName="pfDeadline">
       </div>
 
       <button type="submit" [disabled]="proFormaForm.invalid">

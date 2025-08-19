@@ -5,6 +5,7 @@ import { environment } from '../../environment';
 import { Manager } from '../models/manager.model';
 import { ProForma } from '../models/pro-forma.model';
 import { FinancialSummary } from '../models/financial-summary.model';
+import { ProFormaResponseDto } from '../models/pro-forma-dtos.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,8 +33,8 @@ export class ManagerService {
     );
   }
 
-  getAllProFormas(): Observable<ProForma[]> {
-    return this.http.get<ProForma[]>(`${environment.apiUrl}/manager/pro-formas`);
+  getAllProFormas(): Observable<ProFormaResponseDto[]> {
+    return this.http.get<ProFormaResponseDto[]>(`${environment.apiUrl}/manager/pro-formas`);
   }
 
   getMonthlyFinancialSummary(): Observable<FinancialSummary>{
@@ -44,7 +45,7 @@ export class ManagerService {
     return this.http.get<FinancialSummary>(`${environment.apiUrl}/manager/finances/quarterly`)
   }
 
-  createProForma(proForma: Partial<ProForma>): Observable<ProForma>{
-    return this.http.post<ProForma>(`${environment.apiUrl}/manager/pro-formas`, proForma);
+  createProForma(proForma: Partial<ProForma>): Observable<ProFormaResponseDto>{
+    return this.http.post<ProFormaResponseDto>(`${environment.apiUrl}/manager/pro-formas`, proForma);
   }
 }
