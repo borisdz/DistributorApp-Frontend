@@ -8,6 +8,9 @@ export interface ProFormaResponseDto {
     id: number;
     pfDeadline: string;
     pfDateCreated: string;
+    pfTotal: number;
+    discountId: number;
+    discountAmount: number;
     statusId: number;
     statusName: string;
     ordId: number;

@@ -34,15 +34,15 @@ export class ManagerService {
   }
 
   getAllProFormas(): Observable<ProFormaResponseDto[]> {
-    return this.http.get<ProFormaResponseDto[]>(`${environment.apiUrl}/manager/pro-formas`);
+    return this.http.get<ProFormaResponseDto[]>(`${environment.apiUrl}/pro-forma/manager/all`);
   }
 
   getMonthlyFinancialSummary(): Observable<FinancialSummary>{
-    return this.http.get<FinancialSummary>(`${environment.apiUrl}/manager/finances/monthly`);
+    return this.http.get<FinancialSummary>(`${environment.apiUrl}/manager/finances/monthly-report`);
   }
 
   getQuarterlyFinancialSummary(): Observable<FinancialSummary>{
-    return this.http.get<FinancialSummary>(`${environment.apiUrl}/manager/finances/quarterly`)
+    return this.http.get<FinancialSummary>(`${environment.apiUrl}/manager/finances/quarterly-report`)
   }
 
   createProForma(proForma: Partial<ProForma>): Observable<ProFormaResponseDto>{

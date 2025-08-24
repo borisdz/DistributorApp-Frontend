@@ -53,7 +53,7 @@
             <tr>
               <td>{{proForma.id}}</td>
               <td>{{proForma.ordId}}</td>
-              <td>{{proForma.amount | currency}}</td>
+              <td>{{proForma.pfTotal | currency}}</td>
               <td>{{proForma.pfDeadline | date}}</td>
               <td>{{proForma.statusName}}</td>
             </tr>
@@ -79,7 +79,7 @@
             <tr class="overdue">
               <td>{{proForma.id}}</td>
               <td>{{proForma.ordId}}</td>
-              <td>{{proForma.amount | currency}}</td>
+              <td>{{proForma.pfTotal| currency}}</td>
               <td>{{proForma.pfDeadline | date}}</td>
               <td class="days-overdue">{{proForma.daysOverdue}}</td>
             </tr>
