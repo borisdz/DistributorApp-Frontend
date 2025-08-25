@@ -11,6 +11,6 @@ export class DeliveryService {
   constructor(private http: HttpClient) {}
 
   getActiveDeliveriesForWarehouse(): Observable<Delivery[]> {
-    return this.http.get<Delivery[]>(`${environment.apiUrl}/delivery/active`);
+    return this.http.get<Delivery[]>(`${environment.apiUrl}/delivery/manager/active-deliveries`);
   }
 }
