@@ -88,28 +88,4 @@
       </table>
     </div>
   </section>
-
-  <section class="create-pro-forma">
-    <h3>Create New Pro-Forma</h3>
-    <form [formGroup]="proFormaForm" (ngSubmit)="createProForma()">
-      <div class="form-group">
-        <label for="ordId">Order ID</label>
-        <input id="ordId" type="number" formControlName="ordId">
-      </div>
-
-      <div class="form-group">
-        <label for="customerId">Customer ID</label>
-        <input id="customerId" type="number" formControlName="customerId">
-      </div>
-
-      <div class="form-group">
-        <label for="pfDeadline">Deadline</label>
-        <input id="pfDeadline" type="date" formControlName="pfDeadline">
-      </div>
-
-      <button type="submit" [disabled]="proFormaForm.invalid">
-        Create Pro-Forma
-      </button>
-    </form>
-  </section>
 </div>

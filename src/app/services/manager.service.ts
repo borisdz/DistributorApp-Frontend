@@ -3,9 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment';
 import { Manager } from '../models/manager.model';
-import { ProForma } from '../models/pro-forma.model';
 import { FinancialSummary } from '../models/financial-summary.model';
-import { ProFormaResponseDto } from '../models/pro-forma-dtos.model';
+import { ProForma, ProFormaResponseDto } from '../models/pro-forma-dtos.model';
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +44,7 @@ export class ManagerService {
     return this.http.get<FinancialSummary>(`${environment.apiUrl}/manager/finances/quarterly-report`)
   }
 
-  createProForma(proForma: Partial<ProForma>): Observable<ProFormaResponseDto>{
+  createProForma(proForma: number): Observable<ProFormaResponseDto>{
     return this.http.post<ProFormaResponseDto>(`${environment.apiUrl}/manager/pro-formas`, proForma);
   }
 }

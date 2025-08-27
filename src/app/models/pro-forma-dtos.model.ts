@@ -1,7 +1,5 @@
 export interface CreateProFormaDto{
-    pfDeadline: string;
     ordId: number;
-    customerId: number;
 }
 
 export interface ProFormaResponseDto {
@@ -19,4 +17,16 @@ export interface ProFormaResponseDto {
     customerEmail: string;
     customerPhone: string;
     daysOverdue?: number;
+}
+
+export interface ProForma {
+    id: number;
+    orderId: number;
+    amount: number;
+    dueDate: Date;
+    status: 'pending' | 'paid' | 'overdue';
+    isPaid: boolean;
+    isCreated: boolean;
+    daysOverdue?: number;
+    notes?: string;
 }

@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ProForma } from '../../models/pro-forma.model';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FinancialSummary } from '../../models/financial-summary.model';
 import { ManagerService } from '../../services/manager.service';
 import { ProFormaResponseDto } from '../../models/pro-forma-dtos.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-manager-finances',
-  imports: [NavbarComponent, CommonModule, ReactiveFormsModule],
+  imports: [NavbarComponent, CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './manager-finances.component.html',
   styleUrl: './manager-finances.component.css'
 })
@@ -25,23 +25,16 @@ export class ManagerFinancesComponent {
   proFormaForm!: FormGroup;
   selectedPeriod: 'monthly' | 'quarterly' = 'monthly';
 
+  orderIdForProForma: number | null = null;
+  isCreatingProForma: boolean = false;
+  proFormaCreationStatus: { success: boolean; message?: string } | null = null;
+
   constructor(
-    private managerService: ManagerService,
-    private fb: FormBuilder
-  ) {
-    this.initForm();
-  }
+    private managerService: ManagerService
+  ) { }
 
   ngOnInit() {
     this.loadData();
-  }
-
-  private initForm() {
-    this.proFormaForm = this.fb.group({
-      orderId: ['', Validators.required],
-      dueDate: ['', Validators.required],
-      notes: ['']
-    });
   }
 
   private loadData() {
@@ -80,20 +73,37 @@ export class ManagerFinancesComponent {
     }
   }
 
-  createProForma() {
-    if (this.proFormaForm.valid) {
-      this.managerService.createProForma(this.proFormaForm.value).subscribe({
-        next: () => {
-          this.loadData();
-          this.proFormaForm.reset();
-        },
-        error: (err) => console.error('Error creating pro-forma:', err)
-      });
-    }
-  }
-
   togglePeriod() {
     this.selectedPeriod = this.selectedPeriod === 'monthly' ? 'quarterly' : 'monthly';
     this.loadFinancialSummaries();
+  }
+
+  createProForma() {
+    if (!this.orderIdForProForma) return;
+
+    this.isCreatingProForma = true;
+    this.proFormaCreationStatus = null;
+
+    this.managerService.createProForma(this.orderIdForProForma).subscribe({
+      next: (response) => {
+        this.isCreatingProForma = false;
+        this.proFormaCreationStatus = { success: true };
+        this.orderIdForProForma = null;
+
+        this.loadFinancialSummaries();
+
+        setTimeout(() => {
+          this.proFormaCreationStatus = null;
+        }, 3000);
+      },
+      error: (error) => {
+        this.isCreatingProForma = false;
+        this.proFormaCreationStatus = {
+          success: false,
+          message: error.error?.message || 'Failed to create pro-forma'
+        };
+      }
+    });
+
   }
 }
