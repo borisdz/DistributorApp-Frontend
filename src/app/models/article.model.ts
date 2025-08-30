@@ -9,4 +9,5 @@ export interface Article {
   categoryId: number;
   weight: number;
   image?: string;
+  unitPrice: number;
 }
