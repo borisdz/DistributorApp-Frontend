@@ -72,6 +72,6 @@ export class OrderService {
   }
 
   getUnassignedOrdersForWarehouse(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${environment.apiUrl}/order/unassigned`);
+    return this.http.get<Order[]>(`${environment.apiUrl}/order/manager/unassigned-orders`);
   }
 }

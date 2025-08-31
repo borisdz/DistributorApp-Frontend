@@ -1,1 +1,91 @@
-<p>manager-finances works!</p>
+<app-navbar></app-navbar>
+
+<div class="finances-container">
+  <section class="financial-summary">
+    <h2>Financial Overview</h2>
+    <div class="period-toggle">
+      <button [class.active]="selectedPeriod === 'monthly'" 
+              (click)="selectedPeriod = 'monthly'; loadFinancialSummaries()">
+        Monthly View
+      </button>
+      <button [class.active]="selectedPeriod === 'quarterly'"
+              (click)="selectedPeriod = 'quarterly'; loadFinancialSummaries()">
+        Quarterly View
+      </button>
+    </div>
+
+    <div class="summary-cards">
+      @if (selectedPeriod === 'monthly') {
+        <div class="summary-card">
+          <h3>Monthly Summary</h3>
+          <p>Total Sales: {{monthlySummary?.totalSales | currency}}</p>
+          <p>Total Expenses: {{monthlySummary?.totalExpenses | currency}}</p>
+          <p>Profit: {{monthlySummary?.profit | currency}}</p>
+          <p>Growth: {{monthlySummary?.growth}}%</p>
+        </div>
+      } @else {
+        <div class="summary-card">
+          <h3>Quarterly Summary</h3>
+          <p>Total Sales: {{quarterlySummary?.totalSales | currency}}</p>
+          <p>Total Expenses: {{quarterlySummary?.totalExpenses | currency}}</p>
+          <p>Profit: {{quarterlySummary?.profit | currency}}</p>
+          <p>Growth: {{quarterlySummary?.growth}}%</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="pro-forma-tables">
+    <div class="table-container">
+      <h3>Unpaid Pro-Formas ({{unpaidProFormas.length}})</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Order ID</th>
+            <th>Amount</th>
+            <th>Due Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (proForma of unpaidProFormas; track proForma.id) {
+            <tr>
+              <td>{{proForma.id}}</td>
+              <td>{{proForma.ordId}}</td>
+              <td>{{proForma.pfTotal | currency}}</td>
+              <td>{{proForma.pfDeadline | date}}</td>
+              <td>{{proForma.statusName}}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-container">
+      <h3>Overdue Pro-Formas ({{overdueProFormas.length}})</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Order ID</th>
+            <th>Amount</th>
+            <th>Due Date</th>
+            <th>Days Overdue</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (proForma of overdueProFormas; track proForma.id) {
+            <tr class="overdue">
+              <td>{{proForma.id}}</td>
+              <td>{{proForma.ordId}}</td>
+              <td>{{proForma.pfTotal| currency}}</td>
+              <td>{{proForma.pfDeadline | date}}</td>
+              <td class="days-overdue">{{proForma.daysOverdue}}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
