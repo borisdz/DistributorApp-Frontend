@@ -20,6 +20,8 @@ export class ManagerWarehouseComponent {
   totalLoss: number = 0;
   warehouseId: number = 1;
 
+  public Math = Math;
+
   constructor(private warehouseService: WarehouseService) {}
 
   ngOnInit() {

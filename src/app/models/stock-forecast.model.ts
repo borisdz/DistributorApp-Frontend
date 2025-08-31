@@ -1,6 +1,7 @@
 export interface StockForecast {
-  articleId: number;
-  predictedStock: number;
-  reorderLevel: number;
-  leadTime: number;
+  articleName: string;
+  currentStock: number;
+  dailyUsage: number;
+  daysRemaining: number;
+  estimatedRefillDate: string;
 }
