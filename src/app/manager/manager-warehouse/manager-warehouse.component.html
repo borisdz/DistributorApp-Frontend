@@ -1,1 +1,250 @@
-<p>manager-warehouse works!</p>
+<app-navbar></app-navbar>
+
+<div class="container-fluid mt-4">
+  <h1>Warehouse Management</h1>
+  
+  <!-- Summary Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <h5>Available Articles</h5>
+          <h2>{{ availableArticles.length }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-warning text-white">
+        <div class="card-body">
+          <h5>Pending Delivery</h5>
+          <h2>{{ pendingDeliveryArticles.length }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-danger text-white">
+        <div class="card-body">
+          <h5>Near Expiration</h5>
+          <h2>{{ nearExpirationArticles.length }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-dark text-white">
+        <div class="card-body">
+          <h5>Total Loss</h5>
+          <h2>{{ totalLoss | currency }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Available Articles -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4>Available Articles</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Article Name</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Total Value</th>
+                  <th>Stock Level</th>
+                  <th>Expiration Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let article of availableArticles" 
+                    [class]="'stock-' + getStockLevel(article.quantity, article.minQuantity)">
+                  <td>{{ article.name }}</td>
+                  <td>{{ article.quantity }}</td>
+                  <td>{{ article.unitPrice | currency }}</td>
+                  <td>{{ (article.quantity * article.unitPrice) | currency }}</td>
+                  <td>
+                    <span class="badge" 
+                          [class]="'badge-' + getStockLevel(article.quantity, article.minQuantity)">
+                      {{ getStockLevel(article.quantity, article.minQuantity) | titlecase }}
+                    </span>
+                  </td>
+                  <td>{{ article.expirationDate | date }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pending Delivery Articles -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4>Articles Pending Delivery</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Article Name</th>
+                  <th>Quantity</th>
+                  <th>Delivery ID</th>
+                  <th>Customer</th>
+                  <th>Scheduled Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let article of pendingDeliveryArticles">
+                  <td>{{ article.name }}</td>
+                  <td>{{ article.quantity }}</td>
+                  <td>{{ article.deliveryId }}</td>
+                  <td>{{ article.customerName }}</td>
+                  <td>{{ article.scheduledDate | date }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Near Expiration Articles -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-warning">
+        <div class="card-header bg-warning text-dark">
+          <h4>Articles Near Expiration (Next 7 Days)</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Article Name</th>
+                  <th>Quantity</th>
+                  <th>Days Until Expiration</th>
+                  <th>Expiration Date</th>
+                  <th>Potential Loss</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let article of nearExpirationArticles" class="table-warning">
+                  <td>{{ article.name }}</td>
+                  <td>{{ article.quantity }}</td>
+                  <td>
+                    <span class="badge bg-warning text-dark">
+                      {{ getDaysUntilExpiration(article.expirationDate) }} days
+                    </span>
+                  </td>
+                  <td>{{ article.expirationDate | date }}</td>
+                  <td>{{ (article.quantity * article.unitPrice) | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expired Articles -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+          <h4>Expired Articles - Total Loss: {{ totalLoss | currency }}</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Article Name</th>
+                  <th>Quantity</th>
+                  <th>Expiration Date</th>
+                  <th>Days Expired</th>
+                  <th>Loss Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let article of expiredArticles" class="table-danger">
+                  <td>{{ article.name }}</td>
+                  <td>{{ article.quantity }}</td>
+                  <td>{{ article.expirationDate | date }}</td>
+                  <td>
+                    <span class="badge bg-danger">
+                      {{ Math.abs(getDaysUntilExpiration(article.expirationDate)) }} days ago
+                    </span>
+                  </td>
+                  <td>{{ (article.quantity * article.unitPrice) | currency }}</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-danger">Mark for Disposal</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stock Forecast Chart -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4>Stock Forecast & Refill Schedule</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Article Name</th>
+                  <th>Current Stock</th>
+                  <th>Daily Usage</th>
+                  <th>Days Remaining</th>
+                  <th>Estimated Refill Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let forecast of stockForecast" 
+                    [class]="forecast.daysRemaining <= 7 ? 'table-danger' : 
+                             forecast.daysRemaining <= 14 ? 'table-warning' : 'table-success'">
+                  <td>{{ forecast.articleName }}</td>
+                  <td>{{ forecast.currentStock }}</td>
+                  <td>{{ forecast.dailyUsage }}</td>
+                  <td>
+                    <span class="badge" 
+                          [class]="forecast.daysRemaining <= 7 ? 'bg-danger' : 
+                                   forecast.daysRemaining <= 14 ? 'bg-warning' : 'bg-success'">
+                      {{ forecast.daysRemaining }} days
+                    </span>
+                  </td>
+                  <td>{{ forecast.estimatedRefillDate | date }}</td>
+                  <td>
+                    <span *ngIf="forecast.daysRemaining <= 7" class="badge bg-danger">Urgent</span>
+                    <span *ngIf="forecast.daysRemaining > 7 && forecast.daysRemaining <= 14" class="badge bg-warning">Soon</span>
+                    <span *ngIf="forecast.daysRemaining > 14" class="badge bg-success">OK</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
