@@ -1,1 +1,72 @@
-<p>manager-drivers works!</p>
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h1 class="mb-4">Driver Management</h1>
+
+  <div *ngIf="errorMessage" class="error-container">
+    <p class="error-message">{{ errorMessage }}</p>
+    <button class="retry-button" (click)="loadDrivers()">Retry</button>
+  </div>
+
+  <div *ngIf="!errorMessage && drivers.length === 0" class="empty-state">
+    <p>No drivers found. Add drivers to manage your delivery staff.</p>
+  </div>
+
+  <div *ngIf="drivers.length > 0" class="table-container">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Driver</th>
+          <th>Contact</th>
+          <th>License Status</th>
+          <th>Vehicle</th>
+          <th>Deliveries</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let driver of drivers">
+          <td>
+            <div class="driver-info">
+              <span class="driver-name">{{ driver.name }} {{ driver.name }}</span>
+              <span class="driver-id">ID: {{ driver.id }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="contact-info">
+              <span>{{ driver.phone }}</span>
+              <span>{{ driver.email }}</span>
+            </div>
+          </td>
+          <td>
+            <!-- <span class="license-status" [ngClass]="getLicenseStatusClass(driver.licenseStatus)">
+              {{ driver.licenseStatus }}
+              <span *ngIf="driver.licenseExpiration" class="expiration-date">
+                Exp: {{ driver.licenseExpiration | date }}
+              </span>
+            </span> -->
+          </td>
+          <td>
+            <ng-container *ngIf="driver.vehId; else noVehicle">
+              <div class="vehicle-info">
+                <span>{{ driver.vehId }} {{ driver.vehId }}</span>
+                <span class="license-plate">{{ driver.vehId }}</span>
+              </div>
+            </ng-container>
+            <ng-template #noVehicle>
+              <span class="no-vehicle">No vehicle assigned</span>
+            </ng-template>
+          </td>
+          <td class="deliveries-count">
+            <!-- {{ driver.deliveriesCompleted }} -->
+          </td>
+          <td>
+            <!-- <span class="driver-status" [ngClass]="{'status-active': driver.isActive, 'status-inactive': !driver.isActive}">
+              {{ driver.isActive ? 'Active' : 'Inactive' }}
+            </span> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

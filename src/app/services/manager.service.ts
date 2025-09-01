@@ -5,12 +5,13 @@ import { environment } from '../../environment';
 import { Manager } from '../models/manager.model';
 import { FinancialSummary } from '../models/financial-summary.model';
 import { ProForma, ProFormaResponseDto } from '../models/pro-forma-dtos.model';
+import { Driver } from '../models/driver.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ManagerService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getProfile(): Observable<Manager> {
     return this.http.get<Manager>(`${environment.apiUrl}/manager/profile`);
@@ -36,15 +37,19 @@ export class ManagerService {
     return this.http.get<ProFormaResponseDto[]>(`${environment.apiUrl}/pro-forma/manager/all`);
   }
 
-  getMonthlyFinancialSummary(): Observable<FinancialSummary>{
+  getMonthlyFinancialSummary(): Observable<FinancialSummary> {
     return this.http.get<FinancialSummary>(`${environment.apiUrl}/manager/finances/monthly-report`);
   }
 
-  getQuarterlyFinancialSummary(): Observable<FinancialSummary>{
-    return this.http.get<FinancialSummary>(`${environment.apiUrl}/manager/finances/quarterly-report`)
+  getQuarterlyFinancialSummary(): Observable<FinancialSummary> {
+    return this.http.get<FinancialSummary>(`${environment.apiUrl}/manager/finances/quarterly-report`);
   }
 
-  createProForma(proForma: number): Observable<ProFormaResponseDto>{
+  createProForma(proForma: number): Observable<ProFormaResponseDto> {
     return this.http.post<ProFormaResponseDto>(`${environment.apiUrl}/manager/pro-formas`, proForma);
+  }
+
+  getDrivers(): Observable<Driver[]> {
+    return this.http.get<Driver[]>(`${environment.apiUrl}/driver/manager/list-all`);
   }
 }
