@@ -30,7 +30,7 @@ export class CustomerDashboardComponent {
   }
 
   trackByOrder(_: number, o: Order) {
-    return o.ordDate + o.ordSum;
+    return o.ord_date + o.ord_sum;
   }
 
   trackByDelivery(_: number, d: Delivery) {

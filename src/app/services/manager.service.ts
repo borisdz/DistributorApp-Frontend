@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment';
@@ -6,6 +6,10 @@ import { Manager } from '../models/manager.model';
 import { FinancialSummary } from '../models/financial-summary.model';
 import { ProForma, ProFormaResponseDto } from '../models/pro-forma-dtos.model';
 import { Driver } from '../models/driver.model';
+import { Vehicle } from '../models/vehicle.model';
+import { City } from '../models/city.model';
+import { Order } from '../models';
+import { Delivery } from '../models/delivery.model';
 
 @Injectable({
   providedIn: 'root',
@@ -52,4 +56,25 @@ export class ManagerService {
   getDrivers(): Observable<Driver[]> {
     return this.http.get<Driver[]>(`${environment.apiUrl}/driver/manager/list-all`);
   }
+
+  getAvailableCities(): Observable<City[]> {
+  return this.http.get<City[]>(`${environment.apiUrl}/manager/cities`);
+}
+
+getAvailableVehicles(): Observable<Vehicle[]> {
+  return this.http.get<Vehicle[]>(`${environment.apiUrl}/manager/vehicles`);
+}
+
+getUnassignedOrdersByCities(cityIds: number[]): Observable<Order[]> {
+  const params = new HttpParams().set('cityIds', cityIds.join(','));
+  return this.http.get<Order[]>(`${environment.apiUrl}/manager/orders/unassigned`, { params });
+}
+
+getWarehouseStock(warehouseId: number): Observable<any[]> {
+  return this.http.get<any[]>(`${environment.apiUrl}/manager/warehouse/${warehouseId}/stock`);
+}
+
+createDelivery(deliveryData: any): Observable<Delivery> {
+  return this.http.post<Delivery>(`${environment.apiUrl}/manager/delivery/create`, deliveryData);
+}
 }

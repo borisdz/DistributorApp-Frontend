@@ -1,19 +1,16 @@
+import { Category } from "./category.model";
+import { Manufacturer } from "./manufacturer.model";
+import { Price } from "./price.model";
+
 export interface Article {
-  id: number;
-  name: string;
-  manufacturer: string;
-  quantity: number;
-  manufacturerId: number;
-  price: number;
-  category: string;
-  categoryId: number;
-  weight: number;
-  image?: string;
-  // --
-  unitPrice: number;
-  expirationDate: string;
-  minQuantity: number;
-  deliveryId: number;
-  customerName: string;
-  scheduledDate: Date;
+  art_id?: number;
+  art_name: string;
+  art_image: string;
+  art_weight: number;
+  ctg_id: number;
+  man_id: number;
+  
+  category?: Category;
+  manufacturer?: Manufacturer;
+  currentPrice?: Price;
 }
