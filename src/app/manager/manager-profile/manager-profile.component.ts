@@ -9,8 +9,8 @@ import {
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { Manager } from '../../models/manager.model';
-import { ManagerService } from '../../services/manager.service';
 import { ImageService } from '../../services/image.service';
+import { ManagerService } from '../../services/manager.service';
 
 @Component({
   selector: 'app-manager-profile',

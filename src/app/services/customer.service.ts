@@ -14,13 +14,13 @@ export class CustomerService {
 
   getCurrentOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(
-      `${environment.apiUrl}/order/customer-current-orders`,
+      `${environment.apiUrl}/order/customer/current-orders`,
     );
   }
 
   getCurrentDeliveries(): Observable<Delivery[]> {
     return this.http.get<Delivery[]>(
-      `${environment.apiUrl}/delivery/customer-current-deliveries`,
+      `${environment.apiUrl}/delivery/customer/current-deliveries`,
     );
   }
 
