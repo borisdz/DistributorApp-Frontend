@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environment';
 import { Manager } from '../models/manager.model';
 import { FinancialSummary } from '../models/financial-summary.model';
-import { ProForma, ProFormaResponseDto } from '../models/pro-forma-dtos.model';
+import {  ProFormaResponseDto } from '../models/pro-forma-dtos.model';
 import { Driver } from '../models/driver.model';
 import { Vehicle } from '../models/vehicle.model';
 import { City } from '../models/city.model';
@@ -58,23 +58,30 @@ export class ManagerService {
   }
 
   getAvailableCities(): Observable<City[]> {
-  return this.http.get<City[]>(`${environment.apiUrl}/manager/cities`);
+  return this.http.get<City[]>(`${environment.apiUrl}/cities/manager/available-cities`);
 }
 
-getAvailableVehicles(): Observable<Vehicle[]> {
-  return this.http.get<Vehicle[]>(`${environment.apiUrl}/manager/vehicles`);
+
+  getAvailableVehicles(deliveryDate?: string): Observable<Vehicle[]> {
+  let params = new HttpParams();
+  if (deliveryDate) {
+    params = params.set('deliveryDate', deliveryDate);
+  }
+  return this.http.get<Vehicle[]>(`${environment.apiUrl}/manager/vehicles/available`, { params });
 }
 
-getUnassignedOrdersByCities(cityIds: number[]): Observable<Order[]> {
-  const params = new HttpParams().set('cityIds', cityIds.join(','));
-  return this.http.get<Order[]>(`${environment.apiUrl}/manager/orders/unassigned`, { params });
-}
+  // TODO: Implement in backend
+  getUnassignedOrdersByCities(cityIds: number[]): Observable<Order[]> {
+    const params = new HttpParams().set('cityIds', cityIds.join(','));
+    return this.http.get<Order[]>(`${environment.apiUrl}/orders/manager/unassigned-by-city`, { params });
+  }
 
-getWarehouseStock(warehouseId: number): Observable<any[]> {
-  return this.http.get<any[]>(`${environment.apiUrl}/manager/warehouse/${warehouseId}/stock`);
-}
+  // TODO: Implement in backend
+  getWarehouseStock(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/warehouse/manager/stock`);
+  }
 
-createDelivery(deliveryData: any): Observable<Delivery> {
-  return this.http.post<Delivery>(`${environment.apiUrl}/manager/delivery/create`, deliveryData);
-}
+  createDelivery(deliveryData: any): Observable<Delivery> {
+    return this.http.post<Delivery>(`${environment.apiUrl}/delivery/manager/create`, deliveryData);
+  }
 }

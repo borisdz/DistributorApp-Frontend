@@ -53,25 +53,27 @@ export class CreateDeliveryComponent implements OnInit {
 
   ngOnInit() {
     this.loadInitialData();
+    this.deliveryForm.get('deliveryDate')?.valueChanges.subscribe((date) => {
+      if (date) {
+        this.loadAvailableVehicles(date);
+      }
+    });
   }
 
   loadInitialData() {
     this.isLoading = true;
 
-    // Load cities and vehicles
     this.managerService.getAvailableCities().subscribe({
       next: (cities) => (this.cities = cities),
       error: (error) => this.handleError('Failed to load cities', error),
     });
 
-    this.managerService.getAvailableVehicles().subscribe({
-      next: (vehicles) => (this.vehicles = vehicles),
-      error: (error) => this.handleError('Failed to load vehicles', error),
-    });
+    const initialDate = this.deliveryForm.get('deliveryDate')?.value;
+    if (initialDate) {
+      this.loadAvailableVehicles(initialDate);
+    }
 
-    // Load warehouse stock
-    this.managerService.getWarehouseStock(1).subscribe({
-      // Replace with actual warehouse ID
+    this.managerService.getWarehouseStock().subscribe({
       next: (stock) => (this.warehouseStock = stock),
       error: (error) =>
         this.handleError('Failed to load warehouse stock', error),
@@ -110,6 +112,24 @@ export class CreateDeliveryComponent implements OnInit {
     }
   }
 
+  loadAvailableVehicles(deliveryDate: string) {
+    this.managerService.getAvailableVehicles(deliveryDate).subscribe({
+      next: (vehicles) => {
+        this.vehicles = vehicles;
+        // Reset selected vehicle if it's no longer available
+        if (
+          this.selectedVehicle &&
+          !vehicles.find((v) => v.veh_id === this.selectedVehicle!.veh_id)
+        ) {
+          this.selectedVehicle = null;
+          this.maxWeight = 0;
+          this.deliveryForm.patchValue({ selectedVehicle: null });
+        }
+      },
+      error: (error) => this.handleError('Failed to load vehicles', error),
+    });
+  }
+
   loadOrdersForSelectedCities() {
     if (this.selectedCities.length === 0) return;
 
@@ -118,7 +138,6 @@ export class CreateDeliveryComponent implements OnInit {
       .getUnassignedOrdersByCities(this.selectedCities)
       .subscribe({
         next: (orders) => {
-          // Sort by oldest first
           this.availableOrders = orders.sort(
             (a, b) =>
               new Date(a.ord_date).getTime() - new Date(b.ord_date).getTime(),
@@ -129,11 +148,17 @@ export class CreateDeliveryComponent implements OnInit {
       });
   }
 
+  onDeliveryDateChange(event: any) {
+    const selectedDate = event.target.value;
+    if (selectedDate) {
+      this.loadAvailableVehicles(selectedDate);
+    }
+  }
+
   onOrderSelectionChange(order: Order, event: any) {
     const isChecked = event.target.checked;
 
     if (isChecked) {
-      // Check if adding this order would exceed vehicle capacity
       const newWeight = this.currentWeight + (order.totalWeight || 0);
       if (newWeight > this.maxWeight) {
         event.target.checked = false;
@@ -143,7 +168,6 @@ export class CreateDeliveryComponent implements OnInit {
         return;
       }
 
-      // Check stock availability
       if (!this.checkStockAvailability(order)) {
         event.target.checked = false;
         alert('Insufficient stock for this order');
@@ -204,7 +228,7 @@ export class CreateDeliveryComponent implements OnInit {
       del_date: this.deliveryForm.value.deliveryDate,
       del_date_created: new Date(),
       veh_id: this.selectedVehicle?.veh_id,
-      d_status_id: 1, // Pending status
+      d_status_id: 1,
       orderIds: this.selectedOrders.map((o) => o.ord_id),
     };
 
