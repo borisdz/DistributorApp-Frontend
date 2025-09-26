@@ -61,7 +61,6 @@ export class ManagerService {
   return this.http.get<City[]>(`${environment.apiUrl}/cities/manager/available-cities`);
 }
 
-
   getAvailableVehicles(deliveryDate?: string): Observable<Vehicle[]> {
   let params = new HttpParams();
   if (deliveryDate) {
