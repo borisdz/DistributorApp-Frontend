@@ -4,13 +4,12 @@
   <div class="row">
     <div class="col-12">
       <h2>Create New Delivery</h2>
-      
+
       <div *ngIf="errorMessage" class="alert alert-danger">
         {{ errorMessage }}
       </div>
 
       <form [formGroup]="deliveryForm" (ngSubmit)="onCreateDelivery()">
-        
         <!-- Step 1: Select Cities -->
         <div class="card mb-4">
           <div class="card-header">
@@ -20,19 +19,23 @@
             <div class="row">
               <div class="col-md-4" *ngFor="let city of cities">
                 <div class="form-check">
-                  <input 
-                    class="form-check-input" 
-                    type="checkbox" 
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
                     [value]="city.city_id"
                     (change)="onCitySelectionChange($event)"
-                    [id]="'city-' + city.city_id">
-                  <label class="form-check-label" [for]="'city-' + city.city_id">
+                    [id]="'city-' + city.city_id"
+                  />
+                  <label
+                    class="form-check-label"
+                    [for]="'city-' + city.city_id"
+                  >
                     {{ city.city_name }}
                   </label>
                 </div>
               </div>
             </div>
-            
+
             <div *ngIf="selectedCities.length > 0" class="mt-3">
               <strong>Selected Cities:</strong> {{ getSelectedCityNames() }}
             </div>
@@ -47,38 +50,50 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-6">
-                <label for="vehicle-select" class="form-label">Select Vehicle:</label>
-                <select 
-                  class="form-select" 
+                <label for="vehicle-select" class="form-label"
+                  >Select Vehicle:</label
+                >
+                <select
+                  class="form-select"
                   id="vehicle-select"
-                  (change)="onVehicleChange($event)">
+                  (change)="onVehicleChange($event)"
+                >
                   <option value="">Choose a vehicle...</option>
-                  <option *ngFor="let vehicle of vehicles" [value]="vehicle.veh_id">
-                    {{ vehicle.veh_plate }} - {{ vehicle.veh_carry_weight }}kg capacity
+                  <option
+                    *ngFor="let vehicle of vehicles"
+                    [value]="vehicle.veh_id"
+                  >
+                    {{ vehicle.veh_plate }} - {{ vehicle.veh_carry_weight }}kg
+                    capacity
                   </option>
                 </select>
               </div>
-              
+
               <div class="col-md-6" *ngIf="selectedVehicle">
                 <label class="form-label">Assigned Driver:</label>
                 <div class="form-control-plaintext">
-                  <strong>{{ selectedVehicle.driver?.name || 'No driver assigned' }}</strong>
+                  <strong>{{
+                    selectedVehicle.driver?.name || "No driver assigned"
+                  }}</strong>
                 </div>
               </div>
             </div>
 
             <!-- Weight Progress Bar -->
             <div *ngIf="selectedVehicle" class="mt-3">
-              <label class="form-label">Vehicle Load: {{ currentWeight }}kg / {{ maxWeight }}kg</label>
+              <label class="form-label"
+                >Vehicle Load: {{ currentWeight }}kg / {{ maxWeight }}kg</label
+              >
               <div class="progress">
-                <div 
-                  class="progress-bar" 
+                <div
+                  class="progress-bar"
                   [class]="getWeightBarClass()"
-                  role="progressbar" 
+                  role="progressbar"
                   [style.width.%]="getWeightPercentage()"
                   [attr.aria-valuenow]="currentWeight"
                   [attr.aria-valuemin]="0"
-                  [attr.aria-valuemax]="maxWeight">
+                  [attr.aria-valuemax]="maxWeight"
+                >
                   {{ getWeightPercentage().toFixed(1) }}%
                 </div>
               </div>
@@ -89,7 +104,9 @@
         <!-- Step 3: Select Orders -->
         <div class="card mb-4" *ngIf="availableOrders.length > 0">
           <div class="card-header">
-            <h4>Step 3: Select Orders ({{ availableOrders.length }} available)</h4>
+            <h4>
+              Step 3: Select Orders ({{ availableOrders.length }} available)
+            </h4>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -110,14 +127,18 @@
                 <tbody>
                   <tr *ngFor="let order of availableOrders">
                     <td>
-                      <input 
-                        type="checkbox" 
+                      <input
+                        type="checkbox"
                         class="form-check-input"
                         (change)="onOrderSelectionChange(order, $event)"
-                        [disabled]="(currentWeight + (order.totalWeight || 0)) > maxWeight && !selectedOrders.includes(order)">
+                        [disabled]="
+                          currentWeight + (order.totalWeight || 0) >
+                            maxWeight && !selectedOrders.includes(order)
+                        "
+                      />
                     </td>
                     <td>{{ order.ord_id }}</td>
-                    <td>{{ order.ord_date | date:'short' }}</td>
+                    <td>{{ order.ord_date | date: "short" }}</td>
                     <td>{{ order.customerName }}</td>
                     <td>{{ order.cityName }}</td>
                     <td>{{ order.customerAddress }}</td>
@@ -141,12 +162,16 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-4">
-                <label for="delivery-date" class="form-label">Delivery Date:</label>
-                <input 
-                  type="date" 
-                  class="form-control" 
+                <label for="delivery-date" class="form-label">
+                  Delivery Date:
+                </label>
+                <input
+                  type="date"
+                  class="form-control"
                   id="delivery-date"
-                  formControlName="deliveryDate">
+                  formControlName="deliveryDate"
+                  (change)="onDeliveryDateChange($event)"
+                />
               </div>
               <div class="col-md-4">
                 <label class="form-label">Selected Orders:</label>
@@ -166,18 +191,25 @@
 
         <!-- Action Buttons -->
         <div class="d-flex justify-content-between">
-          <button 
-            type="button" 
-            class="btn btn-secondary" 
-            (click)="navigateToDeliveries()">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="navigateToDeliveries()"
+          >
             Cancel
           </button>
-          
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             class="btn btn-primary"
-            [disabled]="deliveryForm.invalid || selectedOrders.length === 0 || isLoading">
-            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+            [disabled]="
+              deliveryForm.invalid || selectedOrders.length === 0 || isLoading
+            "
+          >
+            <span
+              *ngIf="isLoading"
+              class="spinner-border spinner-border-sm me-2"
+            ></span>
             Create Delivery
           </button>
         </div>
