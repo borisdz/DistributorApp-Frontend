@@ -34,6 +34,6 @@ export class CustomerDashboardComponent {
   }
 
   trackByDelivery(_: number, d: Delivery) {
-    return d.delDate + d.driverName;
+    return d.del_date + (d.driverName ?? 'Driver name unavailable');
   }
 }

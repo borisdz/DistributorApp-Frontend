@@ -16,9 +16,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let order of orders; trackBy: trackByOrder">
-            <td>{{ order.ordDate | date: "shortDate" }}</td>
-            <td>{{ order.ordSum | currency }}</td>
-            <td>{{ order.ordComment }}</td>
+            <td>{{ order.ord_date | date: "shortDate" }}</td>
+            <td>{{ order.ord_sum | currency }}</td>
+            <td>{{ order.ord_comment }}</td>
           </tr>
         </tbody>
       </table>
@@ -36,9 +36,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let del of deliveries; trackBy: trackByDelivery">
-            <td>{{ del.delDate | date: "shortDate" }}</td>
+            <td>{{ del.del_date | date: "shortDate" }}</td>
             <td>{{ del.driverName }}</td>
-            <td>{{ del.delStatus }}</td>
+            <td>{{ del.d_status_id }}</td>
           </tr>
         </tbody>
       </table>

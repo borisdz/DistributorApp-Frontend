@@ -11,4 +11,10 @@ export interface Delivery {
   d_status_id: number;
   veh_id: number;
   orders?: Order[];
+
+  driverId?: number;
+  driverName?: string;
+  driverImage?: string;
+  deliveryStatus?: string;
+  orderCount?: number;
 }

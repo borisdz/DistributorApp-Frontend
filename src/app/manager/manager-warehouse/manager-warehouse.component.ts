@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { CommonModule } from '@angular/common';
-import { Article } from '../../models';
 import { StockForecast } from '../../models/stock-forecast.model';
 import { WarehouseService } from '../../services/warehouse.service';
+import { WarehouseStock } from '../../models/warehouse-stock.model';
 
 @Component({
   selector: 'app-manager-warehouse',
@@ -12,13 +12,12 @@ import { WarehouseService } from '../../services/warehouse.service';
   styleUrl: './manager-warehouse.component.css',
 })
 export class ManagerWarehouseComponent {
-  availableArticles: Article[] = [];
-  pendingDeliveryArticles: Article[] = [];
-  nearExpirationArticles: Article[] = [];
-  expiredArticles: Article[] = [];
+  availableArticles: WarehouseStock[] = [];
+  pendingDeliveryArticles: WarehouseStock[] = [];
+  nearExpirationArticles: WarehouseStock[] = [];
+  expiredArticles: WarehouseStock[] = [];
   stockForecast: StockForecast[] = [];
   totalLoss: number = 0;
-  warehouseId: number = 1;
 
   public Math = Math;
 
@@ -30,26 +29,25 @@ export class ManagerWarehouseComponent {
 
   loadWarehouseData() {
     this.warehouseService
-      .getAvailableArticles(this.warehouseId)
+      .getAvailableArticles()
       .subscribe((articles) => (this.availableArticles = articles));
     this.warehouseService
-      .getPendingDeliveryArticles(this.warehouseId)
+      .getPendingDeliveryArticles()
       .subscribe((articles) => (this.pendingDeliveryArticles = articles));
     this.warehouseService
-      .getNearExpirationArticles(this.warehouseId)
+      .getNearExpirationArticles()
       .subscribe((articles) => (this.nearExpirationArticles = articles));
     this.warehouseService
-      .getExpiredArticles(this.warehouseId)
+      .getExpiredArticles()
       .subscribe((articles) => (this.expiredArticles = articles));
     this.warehouseService
-      .getStockForecast(this.warehouseId)
+      .getStockForecast()
       .subscribe((forecast) => (this.stockForecast = forecast));
   }
 
   calculateTotalLoss() {
     this.totalLoss = this.expiredArticles.reduce(
-      (sum, article) => sum + article.quantity * article.unitPrice,
-      0,
+      (sum, stock) => sum + stock.quantity * (stock.article.price || 0), 0
     );
   }
 
@@ -61,9 +59,15 @@ export class ManagerWarehouseComponent {
   }
 
   getStockLevel(quantity: number, minQuantity: number): string {
+      const minQty = minQuantity ?? 10;
+
     if (quantity <= 0) return 'out-of-stock';
-    if (quantity <= minQuantity) return 'low-stock';
-    if (quantity <= minQuantity * 2) return 'medium-stock';
+    if (quantity <= minQty) return 'low-stock';
+    if (quantity <= minQty * 2) return 'medium-stock';
     return 'high-stock';
   }
+
+  getMinQuantity(stock: WarehouseStock): number {
+  return stock.article?.minQuantity ?? 10;
+}
 }
