@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NavbarComponent } from '../../navbar/navbar.component';
-import { Category, Manufacturer, Article, OrderItem } from '../../models';
+import { Category, Manufacturer, Article, OrderItem, adaptArticle } from '../../models';
 import { OrderService } from '../../services/order.service';
 import { PagedModel } from '../../models/paged-model';
 
@@ -56,7 +56,8 @@ export class CreateOrderComponent implements OnInit {
       .listArticles(category, manufacturer, search, page, this.pageSize)
       .subscribe((resp: PagedModel<Article>) => {
         const listKey = Object.keys(resp._embedded)[0];
-        this.displayed = resp._embedded[listKey];
+        // Apply adapter to each article
+        this.displayed = resp._embedded[listKey].map(adaptArticle);
         this.currentPage = resp.page.number;
         this.totalPages = resp.page.totalPages;
       });
@@ -71,17 +72,20 @@ export class CreateOrderComponent implements OnInit {
       this.loadPage(this.currentPage + 1);
   }
   trackByArticle(_: number, a: Article) {
-    return a.id;
+    return a.art_id || a.id;
   }
 
   addArticle(a: Article) {
-    const qty = Number(prompt(`Quantity for ${a.name}:`, '1'));
+    const qty = Number(prompt(`Quantity for ${a.art_name}:`, '1'));
 
-    if (!qty || qty < 1 || qty > a.quantity) {
+    if (!qty || qty < 1 || qty > (a.quantity ?? 0)) {
       alert('invalid quantity');
       return;
     }
     this.orderItems.push({
+      ord_id: 0,
+      art_id: a.art_id ?? a.id ?? 0,
+      unit_price: typeof a.price === 'number' ? a.price : (typeof a.currentPrice === 'number' ? a.currentPrice : (a.currentPrice?.price ?? 0)),
       article: a,
       quantity: qty,
     });
@@ -96,7 +100,19 @@ export class CreateOrderComponent implements OnInit {
 
   updateTotal() {
     this.totalSum = this.orderItems.reduce(
-      (sum, it) => sum + it.article.price * it.quantity,
+      (sum, it) => {
+        let price = 0;
+        if (it.article) {
+          if (typeof it.article.price === 'number') {
+            price = it.article.price;
+          } else if (typeof it.article.currentPrice === 'number') {
+            price = it.article.currentPrice;
+          } else if (it.article.currentPrice && typeof it.article.currentPrice.price === 'number') {
+            price = it.article.currentPrice.price;
+          }
+        }
+        return sum + (price * it.quantity);
+      },
       0
     );
   }

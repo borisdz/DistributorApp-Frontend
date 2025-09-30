@@ -1,15 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/">DistributorApp</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#nav"
-      aria-controls="nav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav"
+      aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -24,22 +17,16 @@
             <a class="nav-link" routerLink="/customer/orders">My Orders</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/customer/deliveries"
-              >My Deliveries</a
-            >
+            <a class="nav-link" routerLink="/customer/deliveries">My Deliveries</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/customer/proformas"
-              >My Pro-Formas</a
-            >
+            <a class="nav-link" routerLink="/customer/proformas">My Pro-Formas</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/customer/profile">Profile</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/customer/orders/create"
-              >Create Order</a
-            >
+            <a class="nav-link" routerLink="/customer/orders/create">Create Order</a>
           </li>
         </ng-container>
 
@@ -52,9 +39,19 @@
             <a class="nav-link" routerLink="/manager/warehouse">My Warehouse</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/manager/create-delivery"
-              >Create Delivery</a
-            >
+            <a class="nav-link" routerLink="/manager/deliveries">All Deliveries</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/manager/finances">Finances</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/manager/drivers">Drivers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/manager/vehicles">Vehicles</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/manager/create-delivery">Create Delivery</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/manager/profile">Profile</a>
@@ -74,35 +71,22 @@
         <!-- ADMIN -->
         <ng-container *ngIf="userRole === 'ROLE_ADMIN'">
           <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              id="createDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <a class="nav-link dropdown-toggle" id="createDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
               Create
             </a>
             <ul class="dropdown-menu" aria-labelledby="createDropdown">
               <li>
-                <a class="dropdown-item" routerLink="/admin/driver/add"
-                  >Driver</a
-                >
+                <a class="dropdown-item" routerLink="/admin/driver/add">Driver</a>
               </li>
               <li>
-                <a class="dropdown-item" routerLink="/admin/manager/add"
-                  >Manager</a
-                >
+                <a class="dropdown-item" routerLink="/admin/manager/add">Manager</a>
               </li>
               <li>
-                <a class="dropdown-item" routerLink="/admin/warehouse/add"
-                  >Warehouse</a
-                >
+                <a class="dropdown-item" routerLink="/admin/warehouse/add">Warehouse</a>
               </li>
               <li>
-                <a class="dropdown-item" routerLink="/admin/vehicle/add"
-                  >Vehicle</a
-                >
+                <a class="dropdown-item" routerLink="/admin/vehicle/add">Vehicle</a>
               </li>
             </ul>
           </li>

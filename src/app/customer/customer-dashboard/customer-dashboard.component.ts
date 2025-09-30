@@ -12,28 +12,28 @@ import { CustomerService } from '../../services/customer.service';
   styleUrl: './customer-dashboard.component.css',
 })
 export class CustomerDashboardComponent {
-  orders: Order[]=[];
-  deliveries: Delivery[]=[];
+  orders: Order[] = [];
+  deliveries: Delivery[] = [];
 
-  constructor(private svc: CustomerService){}
+  constructor(private svc: CustomerService) {}
 
-  ngOnInit(){
+  ngOnInit() {
     this.svc.getCurrentOrders().subscribe({
-      next: (o)=>(this.orders=o),
-      error: () => alert('Failed to load orders.')
+      next: (o) => (this.orders = o),
+      error: () => alert('Failed to load orders.'),
     });
 
     this.svc.getCurrentDeliveries().subscribe({
-      next: (d)=>(this.deliveries=d),
-      error: ()=>alert('Failed to load deliveries.')
+      next: (d) => (this.deliveries = d),
+      error: () => alert('Failed to load deliveries.'),
     });
   }
 
-  trackByOrder(_: number, o: Order){
-    return o.ordDate+o.ordSum;
+  trackByOrder(_: number, o: Order) {
+    return o.ord_date + o.ord_sum;
   }
 
-  trackByDelivery(_: number, d: Delivery){
-    return d.delDate+d.driverName;
+  trackByDelivery(_: number, d: Delivery) {
+    return d.del_date + (d.driverName ?? 'Driver name unavailable');
   }
 }

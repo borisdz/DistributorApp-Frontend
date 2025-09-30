@@ -8,23 +8,23 @@ import {
 } from '@angular/forms';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { RouterModule } from '@angular/router';
-import { Customer } from '../../models';
-import { CustomerService } from '../../services/customer.service';
+import { Manager } from '../../models/manager.model';
 import { ImageService } from '../../services/image.service';
+import { ManagerService } from '../../services/manager.service';
 
 @Component({
-  selector: 'app-customer-profile',
+  selector: 'app-manager-profile',
   imports: [CommonModule, ReactiveFormsModule, NavbarComponent, RouterModule],
-  templateUrl: './customer-profile.component.html',
-  styleUrl: './customer-profile.component.css',
+  templateUrl: './manager-profile.component.html',
+  styleUrl: './manager-profile.component.css',
 })
-export class CustomerProfileComponent {
-  profile!: Customer;
+export class ManagerProfileComponent {
+  profile!: Manager;
   form!: FormGroup;
   editMode = false;
 
   constructor(
-    private svc: CustomerService,
+    private svc: ManagerService,
     private fb: FormBuilder,
     private imageSvc: ImageService,
   ) {}
@@ -40,17 +40,19 @@ export class CustomerProfileComponent {
     });
   }
 
-  private buildForm(p: Customer) {
+  // TODO: Update build form to match Manager's attributes
+  private buildForm(p: Manager) {
     this.form = this.fb.group({
       firstName: [p.firstName, Validators.required],
       lastName: [p.lastName, Validators.required],
       email: [p.email, [Validators.required, Validators.email]],
       phone: [p.phone, Validators.required],
-      edb: [p.edb, Validators.required],
-      compName: [p.compName, Validators.required],
-      address: [p.address, Validators.required],
       city: [p.cityId, Validators.required],
     });
+  }
+
+  onSubmit() {
+    this.svc.updateProfile(this.form.value).subscribe();
   }
 
   toggleEdit() {
@@ -75,7 +77,7 @@ export class CustomerProfileComponent {
 
     const file: File = input.files[0];
     this.imageSvc
-      .uploadImage(file, 'CUSTOMER', this.profile.id)
+      .uploadImage(file, 'MANAGER', this.profile.id)
       .then((obs) => {
         obs.subscribe({
           next: (res) => {
@@ -91,32 +93,5 @@ export class CustomerProfileComponent {
         console.error('Upload failed', err);
         alert('Failed to upload profile image.');
       });
-  }
-
-  async changeRepImage(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) {
-      return;
-    }
-    const file: File = input.files[0];
-    try {
-      const obs = await this.imageSvc.uploadImage(
-        file,
-        'CUSTOMER_REP',
-        this.profile.id,
-      );
-      obs.subscribe({
-        next: (res) => {
-          this.profile.repImage = res.imgPath;
-        },
-        error: (err) => {
-          console.error('Upload failed', err);
-          alert('Failed to upload representative image.');
-        },
-      });
-    } catch (err) {
-      console.error('Upload failed', err);
-      alert('Failed to upload representative image.');
-    }
   }
 }

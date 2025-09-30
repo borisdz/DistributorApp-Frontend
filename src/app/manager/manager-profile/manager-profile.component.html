@@ -1,0 +1,85 @@
+<app-navbar></app-navbar>
+<div class="container mt-4">
+  <h2>My Profile</h2>
+
+  <!-- Profile -->
+  <div class="d-flex align-items-center mb-4">
+    <!-- Profile Image -->
+    <img
+      *ngIf="profile.image"
+      [src]="profile.image"
+      class="rounded-circle me-3"
+      width="100"
+      height="100"
+      alt="Profile"
+    />
+    <label class="btn btn-outline-primary me-4">
+      Change Photo
+      <input type="file" hidden (change)="changeProfileImage($event)" />
+    </label>
+  </div>
+
+  <!-- Editable Form -->
+  <form *ngIf="editMode; else viewMode" [formGroup]="form">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label>First Name</label>
+        <input formControlName="firstName" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label>Last Name</label>
+        <input formControlName="lastName" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label>Email</label>
+        <input formControlName="email" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label>Phone</label>
+        <input formControlName="phone" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label>City ID</label>
+        <input formControlName="cityId" class="form-control" type="number" />
+      </div>
+      <!-- optionally show cityName as read‑only: -->
+      <div class="col-md-6">
+        <label>City Name</label>
+        <input [value]="profile.cityName" class="form-control" disabled />
+      </div>
+    </div>
+    <div class="mt-4">
+      <button
+        class="btn btn-primary me-2"
+        (click)="saveProfile()"
+        [disabled]="form.invalid"
+        type="button"
+      >
+        Save
+      </button>
+      <button class="btn btn-secondary" (click)="toggleEdit()" type="button">
+        Cancel
+      </button>
+    </div>
+  </form>
+
+  <!-- View‑Only Mode -->
+  <ng-template #viewMode>
+    <dl class="row">
+      <dt class="col-sm-3">Name</dt>
+      <dd class="col-sm-9">{{ profile.firstName }} {{ profile.lastName }}</dd>
+
+      <dt class="col-sm-3">Email</dt>
+      <dd class="col-sm-9">{{ profile.email }}</dd>
+
+      <dt class="col-sm-3">Phone</dt>
+      <dd class="col-sm-9">{{ profile.phone }}</dd>
+
+      <dt class="col-sm-3">City</dt>
+      <dd class="col-sm-9">{{ profile.cityName }}</dd>
+    </dl>
+    <button class="btn btn-outline-primary" (click)="toggleEdit()">
+      Edit Details
+    </button>
+  </ng-template>
+</div>

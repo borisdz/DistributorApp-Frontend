@@ -18,6 +18,13 @@ import { AddDriverComponent } from './admin/add-driver/add-driver.component';
 import { AddVehicleComponent } from './admin/add-vehicle/add-vehicle.component';
 import { AddWarehouseComponent } from './admin/add-warehouse/add-warehouse.component';
 import { AddManagerComponent } from './admin/add-manager/add-manager.component';
+import { ManagerWarehouseComponent } from './manager/manager-warehouse/manager-warehouse.component';
+import { ManagerDeliveriesComponent } from './manager/manager-deliveries/manager-deliveries.component';
+import { ManagerFinancesComponent } from './manager/manager-finances/manager-finances.component';
+import { ManagerDriversComponent } from './manager/manager-drivers/manager-drivers.component';
+import { ManagerVehiclesComponent } from './manager/manager-vehicles/manager-vehicles.component';
+import { CreateDeliveryComponent } from './manager/create-delivery/create-delivery.component';
+import { ManagerProfileComponent } from './manager/manager-profile/manager-profile.component';
 
 export const routes: Routes = [
   // CUSTOMER ROUTES
@@ -61,6 +68,48 @@ export const routes: Routes = [
   {
     path: 'manager/dashboard',
     component: ManagerDashboardComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_MANAGER'] },
+  },
+  {
+    path: 'manager/warehouse',
+    component: ManagerWarehouseComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_MANAGER'] },
+  },
+  {
+    path: 'manager/deliveries',
+    component: ManagerDeliveriesComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_MANAGER'] },
+  },
+  {
+    path: 'manager/finances',
+    component: ManagerFinancesComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_MANAGER'] },
+  },
+  {
+    path: 'manager/drivers',
+    component: ManagerDriversComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_MANAGER'] },
+  },
+  {
+    path: 'manager/vehicles',
+    component: ManagerVehiclesComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_MANAGER'] },
+  },
+  {
+    path: 'manager/create-delivery',
+    component: CreateDeliveryComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_MANAGER'] },
+  },
+  {
+    path: 'manager/profile',
+    component: ManagerProfileComponent,
     canActivate: [authGuard],
     data: { roles: ['ROLE_MANAGER'] },
   },

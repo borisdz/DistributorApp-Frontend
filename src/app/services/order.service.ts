@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Article, Category, Manufacturer, OrderItem } from '../models';
+import { Article, Category, Manufacturer, Order, OrderItem } from '../models';
 import { PageResponse } from '../models/page-response.model';
 import { PagedModel } from '../models/paged-model';
 
@@ -18,7 +18,7 @@ export class OrderService {
 
   listManufacturers(): Observable<Manufacturer[]> {
     return this.http.get<Manufacturer[]>(
-      `${environment.apiUrl}/manufacturer/all`
+      `${environment.apiUrl}/manufacturer/all`,
     );
   }
 
@@ -27,7 +27,7 @@ export class OrderService {
     manufacturerId: number | null,
     nameFilter: string,
     page: number,
-    size: number
+    size: number,
   ): Observable<PagedModel<Article>> {
     let params = new HttpParams()
       .set('page', page.toString())
@@ -41,30 +41,37 @@ export class OrderService {
 
     return this.http.get<PagedModel<Article>>(
       `${environment.apiUrl}/article/all-pages`,
-      { params }
+      { params },
     );
   }
 
   placeOrder(orderItems: OrderItem[], proForma: boolean): Observable<any> {
     const createOrderPayload = {
-      orderItems: orderItems.map((it)=>({
+      orderItems: orderItems.map((it) => ({
         article: {
-          id: it.article.id,
-          name: it.article.name,
-          manufacturer: it.article.manufacturer,
-          quantity: it.article.quantity,
-          manufacturerId: it.article.manufacturerId,
-          price: it.article.price,
-          category: it.article.category,
-          categoryId: it.article.categoryId,
-          weight: it.article.weight,
-          image: it.article.image || null
+          id: it.article?.id ?? null,
+          name: it.article?.name ?? '',
+          manufacturer: it.article?.manufacturer ?? null,
+          quantity: it.article?.quantity ?? 0,
+          manufacturerId: it.article?.manufacturerId ?? null,
+          price: it.article?.price ?? 0,
+          category: it.article?.category ?? null,
+          categoryId: it.article?.categoryId ?? null,
+          weight: it.article?.weight ?? 0,
+          image: it.article?.image ?? null,
         },
-        quantity: it.quantity
+        quantity: it.quantity,
       })),
-      proForma: proForma
+      proForma: proForma,
     };
 
-    return this.http.post(`${environment.apiUrl}/order/create`, createOrderPayload);
+    return this.http.post(
+      `${environment.apiUrl}/order/create`,
+      createOrderPayload,
+    );
+  }
+
+  getUnassignedOrdersForWarehouse(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${environment.apiUrl}/order/manager/unassigned-orders`);
   }
 }

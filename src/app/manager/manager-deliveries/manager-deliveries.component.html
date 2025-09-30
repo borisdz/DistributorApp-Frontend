@@ -1,0 +1,65 @@
+<app-navbar></app-navbar>
+<h2>All Deliveries</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th (click)="sortTable('date')">Date</th>
+      <th (click)="sortTable('driver')">Driver</th>
+      <th (click)="sortTable('city')">Cities</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let delivery of deliveries" (click)="openDeliveryDetails(delivery)" style="cursor:pointer;">
+      <td>{{ delivery.delDate | date:'short' }}</td>
+      <td>
+        <a (click)="goToDriver(delivery.driverId); $event.stopPropagation();" style="text-decoration:underline; cursor:pointer;">
+          {{ delivery.driverName }}
+        </a>
+      </td>
+      <td>{{ delivery.cities.join(', ') }}</td>
+      <td>{{ delivery.delStatus }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="selectedDelivery" class="modal-backdrop">
+  <div class="modal-content">
+    <h3>Delivery Details</h3>
+    <button class="btn btn-sm btn-danger float-end" (click)="closeModal()">Close</button>
+    <p><strong>Date:</strong> {{ selectedDelivery.delDate | date:'short' }}</p>
+    <p>
+      <strong>Driver:</strong>
+      <a (click)="goToDriver(selectedDelivery?.driverId)" style="text-decoration:underline; cursor:pointer;">
+        {{ selectedDelivery.driverName }}
+      </a>
+    </p>
+    <p><strong>Status:</strong> {{ selectedDelivery.delStatus }}</p>
+    <p><strong>Cities:</strong> {{ selectedDelivery.cities.join(', ') }}</p>
+    <h4>Orders</h4>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Customer</th>
+          <th>City/Address</th>
+          <th>Sum</th>
+          <th>Pro-forma</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of selectedDelivery.orders">
+          <td>
+            <a (click)="goToOrder(order.id)" style="text-decoration:underline; cursor:pointer;">
+              {{ order.id }}
+            </a>
+          </td>
+          <td>{{ order.customerName }}</td>
+          <td>{{ order.city }}, {{ order.address }}</td>
+          <td>{{ order.sum | currency }}</td>
+          <td>{{ order.proforma }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
