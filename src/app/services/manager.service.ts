@@ -76,7 +76,7 @@ export class ManagerService {
 
   getAvailableCities(): Observable<City[]> {
     return this.http.get<City[]>(
-      `${environment.apiUrl}/cities/manager/available-cities`,
+      `${environment.apiUrl}/city/manager/available-cities`,
     );
   }
 
@@ -86,7 +86,7 @@ export class ManagerService {
       params = params.set('deliveryDate', deliveryDate);
     }
     return this.http.get<Vehicle[]>(
-      `${environment.apiUrl}/manager/vehicles/available`,
+      `${environment.apiUrl}/vehicle/manager/available-vehicles`,
       { params },
     );
   }
