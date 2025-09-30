@@ -13,4 +13,8 @@ export class DeliveryService {
   getActiveDeliveriesForWarehouse(): Observable<Delivery[]> {
     return this.http.get<Delivery[]>(`${environment.apiUrl}/delivery/manager/active-deliveries`);
   }
+
+  getAllDeliveriesForWarehouse(): Observable<Delivery[]> {
+    return this.http.get<Delivery[]>(`${environment.apiUrl}/delivery/all`);
+  }
 }
