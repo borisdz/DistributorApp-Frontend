@@ -30,10 +30,10 @@ export class CustomerDashboardComponent {
   }
 
   trackByOrder(_: number, o: Order) {
-    return o.ordDate + o.ordSum;
+    return o.ord_date + o.ord_sum;
   }
 
   trackByDelivery(_: number, d: Delivery) {
-    return d.delDate + d.driverName;
+    return d.del_date + (d.driverName ?? 'Driver name unavailable');
   }
 }

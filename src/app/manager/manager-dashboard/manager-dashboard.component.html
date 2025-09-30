@@ -17,7 +17,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let order of unassignedOrders">
-            <td>{{ order.id }}</td>
+            <td>{{ order.ord_id }}</td>
             <!-- <td>{{ order.customerName }}</td>
             <td>{{ order.date | date: "shortDate" }}</td>
             <td>{{ order.status }}</td> -->
@@ -39,10 +39,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let delivery of activeDeliveries">
-            <!-- <td>{{ delivery.id }}</td> -->
+            <td>{{ delivery.del_id }}</td> 
             <td>{{ delivery.driverName }}</td>
-            <!-- <td>{{ delivery.status }}</td>
-            <td>{{ delivery.orderCount }}</td> -->
+            <td>{{ delivery.deliveryStatus }}</td>
+            <td>{{ delivery.orderCount }}</td>
           </tr>
         </tbody>
       </table>

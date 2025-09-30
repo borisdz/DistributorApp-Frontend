@@ -2,6 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StockForecast } from '../models/stock-forecast.model';
 import { Article } from '../models';
+import { WarehouseStock } from '../models/warehouse-stock.model';
+import { environment } from '../../environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,33 +12,39 @@ import { Article } from '../models';
 export class WarehouseService {
   constructor(private http: HttpClient) {}
 
-  getAvailableArticles(warehouseId: number) {
-    return this.http.get<Article[]>(
-      `/api/warehouses/${warehouseId}/articles/available`,
+  getWarehouseStock(): Observable<WarehouseStock[]> {
+    return this.http.get<WarehouseStock[]>(
+      `${environment.apiUrl}/warehouse/stock`,
     );
   }
 
-  getPendingDeliveryArticles(warehouseId: number) {
-    return this.http.get<Article[]>(
-      `/api/warehouses/${warehouseId}/articles/pending-delivery`,
+  getAvailableArticles(): Observable<WarehouseStock[]> {
+    return this.http.get<WarehouseStock[]>(
+      `${environment.apiUrl}/warehouse/articles/available`,
     );
   }
 
-  getNearExpirationArticles(warehouseId: number) {
-    return this.http.get<Article[]>(
-      `/api/warehouses/${warehouseId}/articles/near-expiration`,
+  getPendingDeliveryArticles(): Observable<WarehouseStock[]> {
+    return this.http.get<WarehouseStock[]>(
+      `${environment.apiUrl}/warehouse/articles/pending-delivery`,
     );
   }
 
-  getExpiredArticles(warehouseId: number) {
-    return this.http.get<Article[]>(
-      `/api/warehouses/${warehouseId}/articles/expired`,
+  getNearExpirationArticles(): Observable<WarehouseStock[]> {
+    return this.http.get<WarehouseStock[]>(
+      `${environment.apiUrl}/warehouse/articles/near-expiration`,
     );
   }
 
-  getStockForecast(warehouseId: number) {
+  getExpiredArticles(): Observable<WarehouseStock[]> {
+    return this.http.get<WarehouseStock[]>(
+      `${environment.apiUrl}/warehouse/articles/expired`,
+    );
+  }
+
+  getStockForecast(): Observable<StockForecast[]> {
     return this.http.get<StockForecast[]>(
-      `/api/warehouses/${warehouseId}/stock-forecast`,
+      `${environment.apiUrl}/warehouse/stock-forecast`,
     );
   }
 }

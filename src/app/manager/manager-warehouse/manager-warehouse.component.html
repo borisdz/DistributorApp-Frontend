@@ -2,7 +2,7 @@
 
 <div class="container-fluid mt-4">
   <h1>Warehouse Management</h1>
-  
+
   <!-- Summary Cards -->
   <div class="row mb-4">
     <div class="col-md-3">
@@ -60,19 +60,40 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let article of availableArticles" 
-                    [class]="'stock-' + getStockLevel(article.quantity, article.minQuantity)">
-                  <td>{{ article.name }}</td>
-                  <td>{{ article.quantity }}</td>
-                  <td>{{ article.unitPrice | currency }}</td>
-                  <td>{{ (article.quantity * article.unitPrice) | currency }}</td>
+                <tr
+                  *ngFor="let stock of availableArticles"
+                  [class]="
+                    'stock-' +
+                    getStockLevel(
+                      stock.quantity,
+                      getMinQuantity(stock)
+                    )
+                  "
+                >
+                  <td>{{ stock.article.art_name }}</td>
+                  <td>{{ stock.quantity }}</td>
+                  <td>{{ stock.article.price | currency }}</td>
+                  <td>{{ stock.quantity * (stock.sellingPrice) | currency }}</td>
                   <td>
-                    <span class="badge" 
-                          [class]="'badge-' + getStockLevel(article.quantity, article.minQuantity)">
-                      {{ getStockLevel(article.quantity, article.minQuantity) | titlecase }}
+                    <span
+                      class="badge"
+                      [class]="
+                        'badge-' +
+                        getStockLevel(
+                          stock.quantity,
+                          getMinQuantity(stock)
+                        )
+                      "
+                    >
+                      {{
+                        getStockLevel(
+                          stock.quantity,
+                          getMinQuantity(stock)
+                        ) | titlecase
+                      }}
                     </span>
                   </td>
-                  <td>{{ article.expirationDate | date }}</td>
+                  <td>{{ stock.nearestExpirationDate | date }}</td>
                 </tr>
               </tbody>
             </table>
@@ -103,11 +124,11 @@
               </thead>
               <tbody>
                 <tr *ngFor="let article of pendingDeliveryArticles">
-                  <td>{{ article.name }}</td>
+                  <td>{{ article.article.art_name }}</td>
                   <td>{{ article.quantity }}</td>
-                  <td>{{ article.deliveryId }}</td>
-                  <td>{{ article.customerName }}</td>
-                  <td>{{ article.scheduledDate | date }}</td>
+                  <!-- <td>{{ article.deliveryId }}</td>
+                  <td>{{ article. }}</td>
+                  <td>{{ article.scheduledDate | date }}</td> -->
                 </tr>
               </tbody>
             </table>
@@ -137,16 +158,19 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let article of nearExpirationArticles" class="table-warning">
-                  <td>{{ article.name }}</td>
+                <tr
+                  *ngFor="let article of nearExpirationArticles"
+                  class="table-warning"
+                >
+                  <td>{{ article.article.art_name }}</td>
                   <td>{{ article.quantity }}</td>
                   <td>
                     <span class="badge bg-warning text-dark">
-                      {{ getDaysUntilExpiration(article.expirationDate) }} days
+                      {{ getDaysUntilExpiration(article.nearestExpirationDate) }} days
                     </span>
                   </td>
-                  <td>{{ article.expirationDate | date }}</td>
-                  <td>{{ (article.quantity * article.unitPrice) | currency }}</td>
+                  <td>{{ article.nearestExpirationDate | date }}</td>
+                  <td>{{ article.quantity * (article.sellingPrice) | currency }}</td>
                 </tr>
               </tbody>
             </table>
@@ -177,18 +201,26 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let article of expiredArticles" class="table-danger">
-                  <td>{{ article.name }}</td>
+                <tr
+                  *ngFor="let article of expiredArticles"
+                  class="table-danger"
+                >
+                  <td>{{ article.article.art_name }}</td>
                   <td>{{ article.quantity }}</td>
-                  <td>{{ article.expirationDate | date }}</td>
+                  <td>{{ article.nearestExpirationDate | date }}</td>
                   <td>
                     <span class="badge bg-danger">
-                      {{ Math.abs(getDaysUntilExpiration(article.expirationDate)) }} days ago
+                      {{
+                        Math.abs(getDaysUntilExpiration(article.nearestExpirationDate))
+                      }}
+                      days ago
                     </span>
                   </td>
-                  <td>{{ (article.quantity * article.unitPrice) | currency }}</td>
+                  <td>{{ article.quantity * (article.sellingPrice) | currency }}</td>
                   <td>
-                    <button class="btn btn-sm btn-outline-danger">Mark for Disposal</button>
+                    <button class="btn btn-sm btn-outline-danger">
+                      Mark for Disposal
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -220,24 +252,53 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let forecast of stockForecast" 
-                    [class]="forecast.daysRemaining <= 7 ? 'table-danger' : 
-                             forecast.daysRemaining <= 14 ? 'table-warning' : 'table-success'">
+                <tr
+                  *ngFor="let forecast of stockForecast"
+                  [class]="
+                    forecast.daysRemaining <= 7
+                      ? 'table-danger'
+                      : forecast.daysRemaining <= 14
+                        ? 'table-warning'
+                        : 'table-success'
+                  "
+                >
                   <td>{{ forecast.articleName }}</td>
                   <td>{{ forecast.currentStock }}</td>
                   <td>{{ forecast.dailyUsage }}</td>
                   <td>
-                    <span class="badge" 
-                          [class]="forecast.daysRemaining <= 7 ? 'bg-danger' : 
-                                   forecast.daysRemaining <= 14 ? 'bg-warning' : 'bg-success'">
+                    <span
+                      class="badge"
+                      [class]="
+                        forecast.daysRemaining <= 7
+                          ? 'bg-danger'
+                          : forecast.daysRemaining <= 14
+                            ? 'bg-warning'
+                            : 'bg-success'
+                      "
+                    >
                       {{ forecast.daysRemaining }} days
                     </span>
                   </td>
                   <td>{{ forecast.estimatedRefillDate | date }}</td>
                   <td>
-                    <span *ngIf="forecast.daysRemaining <= 7" class="badge bg-danger">Urgent</span>
-                    <span *ngIf="forecast.daysRemaining > 7 && forecast.daysRemaining <= 14" class="badge bg-warning">Soon</span>
-                    <span *ngIf="forecast.daysRemaining > 14" class="badge bg-success">OK</span>
+                    <span
+                      *ngIf="forecast.daysRemaining <= 7"
+                      class="badge bg-danger"
+                      >Urgent</span
+                    >
+                    <span
+                      *ngIf="
+                        forecast.daysRemaining > 7 &&
+                        forecast.daysRemaining <= 14
+                      "
+                      class="badge bg-warning"
+                      >Soon</span
+                    >
+                    <span
+                      *ngIf="forecast.daysRemaining > 14"
+                      class="badge bg-success"
+                      >OK</span
+                    >
                   </td>
                 </tr>
               </tbody>
