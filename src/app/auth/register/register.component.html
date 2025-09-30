@@ -1,0 +1,103 @@
+<div class="container my-5">
+  <div class="card mx-auto shadow" style="max-width: 900px;">
+    <div class="card-header text-center">
+      <h2>Customer Registration</h2>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <!-- Left Column -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input id="name" type="text" formControlName="name" class="form-control" />
+              <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="text-danger small">
+                Name is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="surname" class="form-label">Surname</label>
+              <input id="surname" type="text" formControlName="surname" class="form-control" />
+              <div *ngIf="registerForm.get('surname')?.invalid && registerForm.get('surname')?.touched" class="text-danger small">
+                Surname is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input id="email" type="email" formControlName="email" class="form-control" />
+              <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="text-danger small">
+                Email is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="mobile" class="form-label">Mobile</label>
+              <input id="mobile" type="text" formControlName="mobile" class="form-control" />
+              <div *ngIf="registerForm.get('mobile')?.invalid && registerForm.get('mobile')?.touched" class="text-danger small">
+                Mobile is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input id="password" type="password" formControlName="password" class="form-control" />
+              <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="text-danger small">
+                Password is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="repeatedPassword" class="form-label">Repeat Password</label>
+              <input id="repeatedPassword" type="password" formControlName="repeatedPassword" class="form-control" />
+              <div *ngIf="registerForm.hasError('notMatching') && registerForm.get('repeatedPassword')?.touched" class="text-danger small">
+                Passwords do not match.
+              </div>
+            </div>
+          </div>
+          <!-- Right Column -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="profileImage" class="form-label">Profile Image</label>
+              <input id="profileImage" type="file" (change)="onProfileImageSelected($event)" accept="image/*" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label for="repImage" class="form-label">Representative Image</label>
+              <input id="repImage" type="file" (change)="onRepImageSeleted($event)" accept="image/*" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label for="city" class="form-label">City</label>
+              <input id="city" type="number" formControlName="city" class="form-control" />
+              <div *ngIf="registerForm.get('city')?.invalid && registerForm.get('city')?.touched" class="text-danger small">
+                City is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="edb" class="form-label">EDB</label>
+              <input id="edb" type="text" formControlName="edb" class="form-control" />
+              <div *ngIf="registerForm.get('edb')?.invalid && registerForm.get('edb')?.touched" class="text-danger small">
+                EDB is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="compName" class="form-label">Company Name</label>
+              <input id="compName" type="text" formControlName="compName" class="form-control" />
+              <div *ngIf="registerForm.get('compName')?.invalid && registerForm.get('compName')?.touched" class="text-danger small">
+                Company Name is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="address" class="form-label">Address</label>
+              <input id="address" type="text" formControlName="address" class="form-control" />
+              <div *ngIf="registerForm.get('address')?.invalid && registerForm.get('address')?.touched" class="text-danger small">
+                Address is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100" [disabled]="registerForm.invalid">
+          Register
+        </button>
+        <div *ngIf="errorMessage" class="mt-3 text-center text-danger">
+          {{ errorMessage }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

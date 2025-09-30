@@ -1,0 +1,17 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2>Login</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <input type="email" placeholder="Email" formControlName="email" class="input-field" />
+      
+      <input type="password" placeholder="Password" formControlName="password" class="input-field" />
+
+      <button type="submit" class="btn-primary" [disabled]="loginForm.invalid">Log In</button>
+
+      <div class="links">
+        <button type="button" (click)="navigateToRegister()">Register</button>
+        <button type="button" (click)="navigateToForgotPassword()">Forgot Password?</button>
+      </div>
+    </form>
+  </div>
+</div>
